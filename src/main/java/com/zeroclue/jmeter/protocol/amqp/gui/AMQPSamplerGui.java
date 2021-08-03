@@ -1,17 +1,16 @@
 package com.zeroclue.jmeter.protocol.amqp.gui;
 
 import java.awt.*;
-
 import javax.swing.*;
+
+import org.apache.log.Logger;
+import org.apache.jorphan.logging.LoggingManager;
 
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
 import com.zeroclue.jmeter.protocol.amqp.AMQPSampler;
 
@@ -47,7 +46,6 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
     private final JLabeledTextField iterations = new JLabeledTextField("Number of Samples to Aggregate");
 
     protected abstract void setMainPanel(JPanel panel);
-
 
     /**
      * {@inheritDoc}
@@ -148,7 +146,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         sampler.setPassword(password.getText());
         sampler.setConnectionSSL(SSL.isSelected());
 
-        log.info("AMQPSamplerGui.modifyTestElement() called, set user/pass to " + username.getText() + "/" + password.getText() + " on sampler " + sampler);
+        //log.info("AMQPSamplerGui.modifyTestElement() called, set user/pass to " + username.getText() + "/" + password.getText() + " on sampler " + sampler);
     }
 
     protected void init() {

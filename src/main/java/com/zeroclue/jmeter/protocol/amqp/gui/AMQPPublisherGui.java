@@ -27,11 +27,10 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
 
     private JPanel mainPanel;
 
-    /*
-    private static final String[] CONFIG_CHOICES = {"File", "Static"};
-    private final JLabeledRadio configChoice = new JLabeledRadio("Message Source", CONFIG_CHOICES);
-    private final FilePanel messageFile = new FilePanel("Filename", ALL_FILES);
-    */
+    //private static final String[] CONFIG_CHOICES = {"File", "Static"};
+    //private final JLabeledRadio configChoice = new JLabeledRadio("Message Source", CONFIG_CHOICES);
+    //private final FilePanel messageFile = new FilePanel("Filename", ALL_FILES);
+
     private JLabeledTextArea message = new JLabeledTextArea("Message Content");
     private JLabeledTextField messageRoutingKey = new JLabeledTextField("          Routing Key");
     private JLabeledTextField messageType = new JLabeledTextField("     Message Type");
@@ -47,7 +46,7 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
 
     private ArgumentsPanel headers = new ArgumentsPanel("Headers");
 
-    public AMQPPublisherGui(){
+    public AMQPPublisherGui() {
         init();
     }
 

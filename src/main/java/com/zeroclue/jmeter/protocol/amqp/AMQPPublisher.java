@@ -1,22 +1,25 @@
 package com.zeroclue.jmeter.protocol.amqp;
 
-import com.rabbitmq.client.AMQP;
-
 import java.io.IOException;
-import java.security.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeoutException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.lang3.StringUtils;
+
+import org.apache.log.Logger;
+import org.apache.jorphan.logging.LoggingManager;
+
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.Entry;
-import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
 
+import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
-
 
 /**
  * JMeter creates an instance of a sampler class for every occurrence of the
@@ -186,7 +189,7 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
     public String getContentType() {
     	return getPropertyAsString(CONTENT_TYPE);
     }
-    
+
     public void setContentType(String contentType) {
     	setProperty(CONTENT_TYPE, contentType);
     }
@@ -280,7 +283,7 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
         final AMQP.BasicProperties.Builder builder = new AMQP.BasicProperties.Builder();
         final int deliveryMode = getPersistent() ? 2 : 1;
         final String contentType = StringUtils.defaultIfEmpty(getContentType(), "text/plain");
-        
+
         builder.contentType(contentType)
             .contentEncoding(getContentEncoding())
             .deliveryMode(deliveryMode)
@@ -302,7 +305,7 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
         return builder.build();
     }
 
-    protected boolean initChannel() throws IOException, NoSuchAlgorithmException, KeyManagementException {
+    protected boolean initChannel() throws IOException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
         boolean ret = super.initChannel();
 
         if (getUseTx()) {

@@ -8,9 +8,6 @@ import org.apache.jorphan.gui.JLabeledTextField;
 
 import com.zeroclue.jmeter.protocol.amqp.AMQPConsumer;
 
-import java.awt.*;
-
-
 public class AMQPConsumerGui extends AMQPSamplerGui {
 
     private static final long serialVersionUID = 1L;
@@ -23,7 +20,7 @@ public class AMQPConsumerGui extends AMQPSamplerGui {
 
     private JPanel mainPanel;
 
-    public AMQPConsumerGui(){
+    public AMQPConsumerGui() {
         init();
     }
 

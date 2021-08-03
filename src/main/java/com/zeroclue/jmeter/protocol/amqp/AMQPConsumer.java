@@ -1,20 +1,22 @@
 package com.zeroclue.jmeter.protocol.amqp;
 
 import java.io.IOException;
-import java.security.*;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+
+import org.apache.log.Logger;
+import org.apache.jorphan.logging.LoggingManager;
 
 import org.apache.jmeter.samplers.Entry;
-import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.testelement.TestStateListener;
 
-import org.apache.jorphan.logging.LoggingManager;
-import org.apache.log.Logger;
-
 import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.ConsumerCancelledException;
 import com.rabbitmq.client.QueueingConsumer;
+import com.rabbitmq.client.ConsumerCancelledException;
 import com.rabbitmq.client.ShutdownSignalException;
 
 public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStateListener {
@@ -43,7 +45,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
     private transient QueueingConsumer consumer;
     private transient String consumerTag;
 
-    public AMQPConsumer(){
+    public AMQPConsumer() {
         super();
     }
 
@@ -181,7 +183,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         setProperty(PURGE_QUEUE, purgeQueue.toString());
     }
 
-    public boolean purgeQueue(){
+    public boolean purgeQueue() {
         return Boolean.parseBoolean(getPurgeQueue());
     }
 
@@ -200,7 +202,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         setProperty(AUTO_ACK, autoAck.toString());
     }
 
-    public boolean autoAck(){
+    public boolean autoAck() {
         return getPropertyAsBoolean(AUTO_ACK);
     }
 
@@ -298,7 +300,6 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
     }
 
     public void cleanup() {
-
         try {
             if (consumerTag != null) {
                 channel.basicCancel(consumerTag);
@@ -320,7 +321,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         log.debug(tn + " " + tl + " " + s + " " + th);
     }
 
-    protected boolean initChannel() throws IOException, NoSuchAlgorithmException, KeyManagementException {
+    protected boolean initChannel() throws IOException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
         boolean ret = super.initChannel();
         channel.basicQos(getPrefetchCountAsInt());
 
