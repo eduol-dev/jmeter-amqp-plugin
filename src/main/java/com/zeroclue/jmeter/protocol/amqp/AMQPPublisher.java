@@ -50,10 +50,10 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
     private final static String HEADERS             = "AMQPPublisher.Headers";
 
     public static boolean DEFAULT_PERSISTENT        = false;
-    private final static String PERSISTENT          = "AMQPConsumer.Persistent";
+    private final static String PERSISTENT          = "AMQPPublisher.Persistent";
 
     public static boolean DEFAULT_USE_TX            = false;
-    private final static String USE_TX              = "AMQPConsumer.UseTx";
+    private final static String USE_TX              = "AMQPPublisher.UseTx";
 
     public static final int DEFAULT_MESSAGE_PRIORITY = 0;
     public static final String DEFAULT_RESPONSE_CODE = "500";

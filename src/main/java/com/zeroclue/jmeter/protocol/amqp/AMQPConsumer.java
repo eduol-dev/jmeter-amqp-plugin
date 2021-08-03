@@ -41,6 +41,9 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
     public static final String ROUTING_KEY_PARAMETER    = "Routing Key";
     public static final String DELIVERY_TAG_PARAMETER   = "Delivery Tag";
 
+	public static boolean DEFAULT_USE_TX = false;
+	private final static String USE_TX = "AMQPConsumer.UseTx";
+
     private transient Channel channel;
     private transient QueueingConsumer consumer;
     private transient String consumerTag;
@@ -109,9 +112,14 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
                     result.setSamplerData("Read response is false.");
                 }
 
-                if(!autoAck())
+                if (!autoAck())
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
             }
+
+			// commit the sample
+			if (getUseTx()) {
+				channel.txCommit();
+			}
 
             /*
              * Set up the sample result details
@@ -234,6 +242,14 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         return getPropertyAsInt(PREFETCH_COUNT);
     }
 
+	public Boolean getUseTx() {
+		return getPropertyAsBoolean(USE_TX, DEFAULT_USE_TX);
+	}
+
+	public void setUseTx(Boolean tx) {
+		setProperty(USE_TX, tx);
+	}
+
     /**
      * set whether the sampler should read the response or not
      *
@@ -324,6 +340,10 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
     protected boolean initChannel() throws IOException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
         boolean ret = super.initChannel();
         channel.basicQos(getPrefetchCountAsInt());
+
+		if (getUseTx()) {
+			channel.txSelect();
+		}
 
         return ret;
     }
