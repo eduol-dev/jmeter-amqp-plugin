@@ -16,6 +16,7 @@ import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.testelement.ThreadListener;
 
+import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Address;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -23,7 +24,16 @@ import com.rabbitmq.client.ConnectionFactory;
 
 public abstract class AMQPSampler extends AbstractSampler implements ThreadListener {
 
-    public static final boolean DEFAULT_EXCHANGE_DURABLE = true;
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
+	public static final String[] EXCHANGE_TYPES = new String[] {
+			"direct",
+			"topic",
+			"headers",
+			"fanout"
+	};
+
+	public static final boolean DEFAULT_EXCHANGE_DURABLE = true;
     public static final boolean DEFAULT_EXCHANGE_REDECLARE = false;
     public static final boolean DEFAULT_QUEUE_REDECLARE = false;
 
@@ -38,8 +48,6 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
 
     public static final int DEFAULT_MIN_PRIORITY = 0;
     public static final int DEFAULT_MAX_PRIORITY = 255;
-
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     //++ These are JMX names, and must not be changed
     protected static final String EXCHANGE              = "AMQPSampler.Exchange";
@@ -63,6 +71,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     private static final String QUEUE_REDECLARE         = "AMQPSampler.Redeclare";
     private static final String QUEUE_EXCLUSIVE         = "AMQPSampler.QueueExclusive";
     private static final String QUEUE_AUTO_DELETE       = "AMQPSampler.QueueAutoDelete";
+
     private static final int DEFAULT_HEARTBEAT = 1;
 
     private final transient ConnectionFactory factory;
@@ -95,7 +104,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
                         deleteQueue();
                     }
 
-                    //AMQP.Queue.DeclareOk declareQueueResp = channel.queueDeclare(getQueue(), queueDurable(), queueExclusive(), queueAutoDelete(), getQueueArguments());
+                    AMQP.Queue.DeclareOk declareQueueResp = channel.queueDeclare(getQueue(), queueDurable(), queueExclusive(), queueAutoDelete(), getQueueArguments());
                 }
 
                 if (!StringUtils.isBlank(getExchange())) {   // use a named exchange
@@ -103,7 +112,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
                         deleteExchange();
                     }
 
-                    //AMQP.Exchange.DeclareOk declareExchangeResp = channel.exchangeDeclare(getExchange(), getExchangeType(), getExchangeDurable());
+                    AMQP.Exchange.DeclareOk declareExchangeResp = channel.exchangeDeclare(getExchange(), getExchangeType(), getExchangeDurable());
 
                     if (queueConfigured) {
                         channel.queueBind(getQueue(), getExchange(), getRoutingKey());

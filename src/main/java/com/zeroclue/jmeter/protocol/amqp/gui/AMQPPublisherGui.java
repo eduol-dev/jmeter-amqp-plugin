@@ -5,6 +5,7 @@ import javax.swing.*;
 
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
+import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
@@ -12,14 +13,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 import com.zeroclue.jmeter.protocol.amqp.AMQPPublisher;
 
 /**
- * AMQP Sampler
- *
- * This class is responsible for ensuring that the Sampler data is kept in step
- * with the GUI.
- *
- * The GUI class is not invoked in non-GUI mode, so it should not perform any
- * additional setup that a test would need at run-time
- *
+ * This is the GUI for AMQP Publisher
  */
 public class AMQPPublisherGui extends AMQPSamplerGui {
 
@@ -31,18 +25,18 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
     //private final JLabeledRadio configChoice = new JLabeledRadio("Message Source", CONFIG_CHOICES);
     //private final FilePanel messageFile = new FilePanel("Filename", ALL_FILES);
 
-    private JLabeledTextArea message = new JLabeledTextArea("Message Content");
-    private JLabeledTextField messageRoutingKey = new JLabeledTextField("          Routing Key");
-    private JLabeledTextField messageType = new JLabeledTextField("     Message Type");
-    private JLabeledTextField replyToQueue = new JLabeledTextField("   Reply-To Queue");
-    private JLabeledTextField messageId = new JLabeledTextField("           Message ID");
-    private JLabeledTextField correlationId = new JLabeledTextField("       Correlation ID");
-    private JLabeledTextField messagePriority = new JLabeledTextField(" Message Priority");
-    private JLabeledTextField contentType = new JLabeledTextField("        Content-Type");
-    private JLabeledTextField contentEncoding = new JLabeledTextField("Content Encoding");
+    private final JLabeledTextArea message = new JLabeledTextArea("Message Content");
+    private final JLabeledTextField messageRoutingKey = new JLabeledTextField("          Routing Key");
+    private final JLabeledTextField messageType = new JLabeledTextField("     Message Type");
+    private final JLabeledTextField replyToQueue = new JLabeledTextField("   Reply-To Queue");
+    private final JLabeledTextField messageId = new JLabeledTextField("           Message ID");
+    private final JLabeledTextField correlationId = new JLabeledTextField("       Correlation ID");
+    private final JLabeledTextField messagePriority = new JLabeledTextField(" Message Priority");
+    private final JLabeledTextField contentType = new JLabeledTextField("        Content-Type");
+    private final JLabeledTextField contentEncoding = new JLabeledTextField("Content Encoding");
 
-    private JCheckBox persistent = new JCheckBox("Persistent?", AMQPPublisher.DEFAULT_PERSISTENT);
-    private JCheckBox useTx = new JCheckBox("Use Transactions?", AMQPPublisher.DEFAULT_USE_TX);
+    private JCheckBox persistent = new JCheckBox("Persistent", AMQPPublisher.DEFAULT_PERSISTENT);
+    private JCheckBox useTx = new JCheckBox("Use Transactions", AMQPPublisher.DEFAULT_USE_TX);
 
     private ArgumentsPanel headers = new ArgumentsPanel("Headers");
 
@@ -83,6 +77,7 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
         messagePriority.setText(sampler.getMessagePriority());
         messageId.setText(sampler.getMessageId());
         message.setText(sampler.getMessage());
+
         configureHeaders(sampler);
     }
 
@@ -93,6 +88,7 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
     public TestElement createTestElement() {
         AMQPPublisher sampler = new AMQPPublisher();
         modifyTestElement(sampler);
+
         return sampler;
     }
 
@@ -119,6 +115,7 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
         sampler.setContentType(contentType.getText());
         sampler.setContentEncoding(contentEncoding.getText());
         sampler.setMessageId(messageId.getText());
+
         sampler.setHeaders((Arguments) headers.createTestElement());
     }
 
@@ -148,8 +145,11 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
 
         JPanel messagePanel = new JPanel(new GridBagLayout());
         messagePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Message"));
-        messagePanel.add(persistent, constraints);
-        messagePanel.add(useTx, constraints);
+
+		JPanel optionsPanel = new HorizontalPanel();
+		optionsPanel.add(persistent);
+		optionsPanel.add(useTx);
+		messagePanel.add(optionsPanel, constraints);
 
         messagePanel.add(initMessagePropertyPanel(), constraints);
         message.setPreferredSize(new Dimension(400, 200));
@@ -199,8 +199,8 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
         contentType.setText("text/plain");
         contentEncoding.setText("utf-8");
         messageId.setText("");
-        headers.clearGui();
         message.setText("");
+		headers.clearGui();
     }
 
     private void configureHeaders(AMQPPublisher sampler) {

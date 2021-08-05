@@ -20,14 +20,15 @@ import com.rabbitmq.client.ConsumerCancelledException;
 import com.rabbitmq.client.ShutdownSignalException;
 
 public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStateListener {
+
+	private static final long serialVersionUID = 7480863561320459091L;
+
+	private static final Logger log = LoggingManager.getLoggerForClass();
+
     private static final int DEFAULT_PREFETCH_COUNT = 0;    // unlimited
     public static final boolean DEFAULT_READ_RESPONSE = true;
     public static final String DEFAULT_PREFETCH_COUNT_STRING = Integer.toString(DEFAULT_PREFETCH_COUNT);
     public static final String DEFAULT_RESPONSE_CODE = "500";
-
-    private static final long serialVersionUID = 7480863561320459091L;
-
-    private static final Logger log = LoggingManager.getLoggerForClass();
 
     //++ These are JMX names, and must not be changed
     private static final String PREFETCH_COUNT          = "AMQPConsumer.PrefetchCount";
