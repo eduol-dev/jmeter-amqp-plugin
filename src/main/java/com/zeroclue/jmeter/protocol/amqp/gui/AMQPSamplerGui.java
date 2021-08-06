@@ -3,8 +3,8 @@ package com.zeroclue.jmeter.protocol.amqp.gui;
 import java.awt.*;
 import javax.swing.*;
 
-import org.apache.log.Logger;
-import org.apache.jorphan.logging.LoggingManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
@@ -18,7 +18,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggerFactory.getLogger(AMQPSamplerGui.class);
 
 	private final JLabeledTextField exchange = new JLabeledTextField("    Exchange");
 	private final JLabeledChoice exchangeType = new JLabeledChoice("            Type ", AMQPSampler.EXCHANGE_TYPES, false, false);
@@ -82,7 +82,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
 
 		iterations.setText(sampler.getIterations());
 
-        //log.info("AMQPSamplerGui.configure() called");
+        log.debug("AMQPSamplerGui.configure() called");
     }
 
     /**
@@ -152,7 +152,8 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
 
 		sampler.setIterations(iterations.getText());
 
-        //log.info("AMQPSamplerGui.modifyTestElement() called, set user/pass to " + username.getText() + "/" + password.getText() + " on sampler " + sampler);
+        log.debug("AMQPSamplerGui.modifyTestElement() called, set user/pass to "
+				+ username.getText() + "/" + password.getText() + " on sampler " + sampler);
     }
 
     protected void init() {

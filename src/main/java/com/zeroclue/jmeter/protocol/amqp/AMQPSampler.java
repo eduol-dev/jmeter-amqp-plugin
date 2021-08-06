@@ -10,8 +10,8 @@ import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.lang3.StringUtils;
 
-import org.apache.log.Logger;
-import org.apache.jorphan.logging.LoggingManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.testelement.ThreadListener;
@@ -24,7 +24,7 @@ import com.rabbitmq.client.ConnectionFactory;
 
 public abstract class AMQPSampler extends AbstractSampler implements ThreadListener {
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggerFactory.getLogger(AMQPSampler.class);
 
 	public static final String[] EXCHANGE_TYPES = new String[] {
 			"direct",
@@ -472,7 +472,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
              Channel channel = connection.createChannel();
 
              if (!channel.isOpen()) {
-                 log.fatalError("Failed to open channel: " + channel.getCloseReason().getLocalizedMessage());
+                 log.error("Failed to open channel: " + channel.getCloseReason().getLocalizedMessage());
              }
 
              return channel;

@@ -6,8 +6,8 @@ import java.util.concurrent.TimeoutException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.log.Logger;
-import org.apache.jorphan.logging.LoggingManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -23,7 +23,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
 
 	private static final long serialVersionUID = 7480863561320459091L;
 
-	private static final Logger log = LoggingManager.getLoggerForClass();
+	private static final Logger log = LoggerFactory.getLogger(AMQPConsumer.class);
 
     private static final int DEFAULT_PREFETCH_COUNT = 0;    // unlimited
     public static final boolean DEFAULT_READ_RESPONSE = true;

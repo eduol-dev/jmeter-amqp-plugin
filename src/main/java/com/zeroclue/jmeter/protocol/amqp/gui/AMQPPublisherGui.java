@@ -19,8 +19,6 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
 
     private static final long serialVersionUID = 1L;
 
-    private JPanel mainPanel;
-
     //private static final String[] CONFIG_CHOICES = {"File", "Static"};
     //private final JLabeledRadio configChoice = new JLabeledRadio("Message Source", CONFIG_CHOICES);
     //private final FilePanel messageFile = new FilePanel("Filename", ALL_FILES);
@@ -35,10 +33,12 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
     private final JLabeledTextField contentType = new JLabeledTextField("        Content-Type");
     private final JLabeledTextField contentEncoding = new JLabeledTextField("Content Encoding");
 
-    private JCheckBox persistent = new JCheckBox("Persistent", AMQPPublisher.DEFAULT_PERSISTENT);
-    private JCheckBox useTx = new JCheckBox("Use Transactions", AMQPPublisher.DEFAULT_USE_TX);
+    private final JCheckBox persistent = new JCheckBox("Persistent", AMQPPublisher.DEFAULT_PERSISTENT);
+    private final JCheckBox useTx = new JCheckBox("Use Transactions", AMQPPublisher.DEFAULT_USE_TX);
 
-    private ArgumentsPanel headers = new ArgumentsPanel("Headers");
+    private final ArgumentsPanel headers = new ArgumentsPanel("Headers");
+
+	private JPanel mainPanel;
 
     public AMQPPublisherGui() {
         init();
