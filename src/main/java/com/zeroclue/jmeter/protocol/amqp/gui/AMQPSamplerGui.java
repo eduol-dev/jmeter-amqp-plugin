@@ -22,8 +22,9 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
 
 	private final JLabeledTextField exchange = new JLabeledTextField("    Exchange");
 	private final JLabeledChoice exchangeType = new JLabeledChoice("            Type ", AMQPSampler.EXCHANGE_TYPES, false, false);
-    private final JCheckBox exchangeRedeclare = new JCheckBox("Redeclare", AMQPSampler.DEFAULT_EXCHANGE_REDECLARE);
-    private final JCheckBox exchangeDurable = new JCheckBox("Durable", AMQPSampler.DEFAULT_EXCHANGE_DURABLE);
+	private final JCheckBox exchangeDurable = new JCheckBox("Durable", AMQPSampler.DEFAULT_EXCHANGE_DURABLE);
+	private final JCheckBox exchangeRedeclare = new JCheckBox("Redeclare", AMQPSampler.DEFAULT_EXCHANGE_REDECLARE);
+	private final JCheckBox exchangeAutoDelete = new JCheckBox("Auto Delete", AMQPSampler.DEFAULT_EXCHANGE_AUTO_DELETE);
 
     protected JLabeledTextField queue = new JLabeledTextField("             Queue");
     protected JLabeledTextField routingKey = new JLabeledTextField("   Routing Key");
@@ -60,6 +61,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         exchangeType.setText(sampler.getExchangeType());
         exchangeDurable.setSelected(sampler.getExchangeDurable());
         exchangeRedeclare.setSelected(sampler.getExchangeRedeclare());
+        exchangeAutoDelete.setSelected(sampler.getExchangeAutoDelete());
 
         queue.setText(sampler.getQueue());
         routingKey.setText(sampler.getRoutingKey());
@@ -68,9 +70,9 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         maxPriority.setText(sampler.getMaxPriority());
 
         queueDurable.setSelected(sampler.queueDurable());
-        queueExclusive.setSelected(sampler.queueExclusive());
-        queueAutoDelete.setSelected(sampler.queueAutoDelete());
         queueRedeclare.setSelected(sampler.getQueueRedeclare());
+        queueAutoDelete.setSelected(sampler.queueAutoDelete());
+        queueExclusive.setSelected(sampler.queueExclusive());
 
         virtualHost.setText(sampler.getVirtualHost());
         host.setText(sampler.getHost());
@@ -94,6 +96,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
 		exchangeType.setSelectedIndex(0);
         exchangeDurable.setSelected(AMQPSampler.DEFAULT_EXCHANGE_DURABLE);
         exchangeRedeclare.setSelected(AMQPSampler.DEFAULT_EXCHANGE_REDECLARE);
+        exchangeAutoDelete.setSelected(AMQPSampler.DEFAULT_EXCHANGE_AUTO_DELETE);
 
 		queue.setText("jmeterQueue");
         routingKey.setText("jmeterRoutingKey");
@@ -102,9 +105,9 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         maxPriority.setText("");
 
         queueDurable.setSelected(true);
-        queueExclusive.setSelected(false);
-        queueAutoDelete.setSelected(false);
         queueRedeclare.setSelected(AMQPSampler.DEFAULT_QUEUE_REDECLARE);
+        queueAutoDelete.setSelected(false);
+        queueExclusive.setSelected(false);
 
 		virtualHost.setText("/");
         host.setText("localhost");
@@ -127,9 +130,10 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         configureTestElement(sampler);
 
         sampler.setExchange(exchange.getText());
-		sampler.setExchangeType(exchangeType.getText());
+        sampler.setExchangeType(exchangeType.getText());
         sampler.setExchangeDurable(exchangeDurable.isSelected());
         sampler.setExchangeRedeclare(exchangeRedeclare.isSelected());
+        sampler.setExchangeAutoDelete(exchangeAutoDelete.isSelected());
 
         sampler.setQueue(queue.getText());
         sampler.setRoutingKey(routingKey.getText());
@@ -138,9 +142,9 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         sampler.setMaxPriority(maxPriority.getText());
 
         sampler.setQueueDurable(queueDurable.isSelected());
-        sampler.setQueueExclusive(queueExclusive.isSelected());
-        sampler.setQueueAutoDelete(queueAutoDelete.isSelected());
         sampler.setQueueRedeclare(queueRedeclare.isSelected());
+        sampler.setQueueAutoDelete(queueAutoDelete.isSelected());
+        sampler.setQueueExclusive(queueExclusive.isSelected());
 
 		sampler.setVirtualHost(virtualHost.getText());
         sampler.setHost(host.getText());
@@ -207,6 +211,10 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         gridBagConstraints.gridy = 1;
         exchangeSettings.add(exchangeRedeclare, gridBagConstraints);
 
+		gridBagConstraints.gridx = 1;
+		gridBagConstraints.gridy = 2;
+		exchangeSettings.add(exchangeAutoDelete, gridBagConstraints);
+
 		exchangeType.setPreferredSize(exchange.getPreferredSize());
 		exchangeSettings.validate();
 		//exchangeSettings.repaint();
@@ -241,7 +249,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        queueSettings.add(queueExclusive, gridBagConstraints);
+        queueSettings.add(queueRedeclare, gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
@@ -249,7 +257,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        queueSettings.add(queueRedeclare, gridBagConstraints);
+        queueSettings.add(queueExclusive, gridBagConstraints);
 
         gridBagConstraintsCommon.gridx = 0;
         gridBagConstraintsCommon.gridy = 0;

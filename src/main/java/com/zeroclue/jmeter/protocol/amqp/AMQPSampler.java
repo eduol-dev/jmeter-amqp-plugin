@@ -2,6 +2,7 @@ package com.zeroclue.jmeter.protocol.amqp;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
@@ -33,7 +34,8 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
 			"fanout"
 	};
 
-	public static final boolean DEFAULT_EXCHANGE_DURABLE = true;
+    public static final boolean DEFAULT_EXCHANGE_DURABLE = true;
+    public static final boolean DEFAULT_EXCHANGE_AUTO_DELETE = true;
     public static final boolean DEFAULT_EXCHANGE_REDECLARE = false;
     public static final boolean DEFAULT_QUEUE_REDECLARE = false;
 
@@ -54,6 +56,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     protected static final String EXCHANGE_TYPE         = "AMQPSampler.ExchangeType";
     protected static final String EXCHANGE_DURABLE      = "AMQPSampler.ExchangeDurable";
     protected static final String EXCHANGE_REDECLARE    = "AMQPSampler.ExchangeRedeclare";
+    protected static final String EXCHANGE_AUTO_DELETE 	= "AMQPSampler.ExchangeAutoDelete";
     protected static final String QUEUE                 = "AMQPSampler.Queue";
     protected static final String ROUTING_KEY           = "AMQPSampler.RoutingKey";
     protected static final String VIRTUAL_HOST          = "AMQPSampler.VirtualHost";
@@ -112,7 +115,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
                         deleteExchange();
                     }
 
-                    AMQP.Exchange.DeclareOk declareExchangeResp = channel.exchangeDeclare(getExchange(), getExchangeType(), getExchangeDurable());
+                    AMQP.Exchange.DeclareOk declareExchangeResp = channel.exchangeDeclare(getExchange(), getExchangeType(), getExchangeDurable(), getExchangeAutoDelete(), Collections.<String, Object>emptyMap());
 
                     if (queueConfigured) {
                         channel.queueBind(getQueue(), getExchange(), getRoutingKey());
@@ -207,6 +210,14 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
 
     public String getExchangeType() {
         return getPropertyAsString(EXCHANGE_TYPE);
+    }
+
+    public boolean getExchangeAutoDelete() {
+        return getPropertyAsBoolean(EXCHANGE_AUTO_DELETE);
+    }
+
+    public void setExchangeAutoDelete(boolean autoDelete) {
+        setProperty(EXCHANGE_AUTO_DELETE, autoDelete);
     }
 
     public void setExchangeType(String name) {
@@ -349,7 +360,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     }
 
     /**
-     * @return the whether or not the queue is durable
+     * @return the whether the queue is durable
      */
     public String getQueueDurable() {
         return getPropertyAsString(QUEUE_DURABLE);
@@ -368,7 +379,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     }
 
     /**
-     * @return the whether or not the queue is exclusive
+     * @return the whether the queue is exclusive
      */
     public String getQueueExclusive() {
         return getPropertyAsString(QUEUE_EXCLUSIVE);
@@ -387,7 +398,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     }
 
     /**
-     * @return the whether or not the queue should auto delete
+     * @return the whether the queue should auto delete
      */
     public String getQueueAutoDelete() {
         return getPropertyAsString(QUEUE_AUTO_DELETE);
