@@ -13,7 +13,7 @@ import org.apache.jorphan.gui.JLabeledTextField;
 import com.zeroclue.jmeter.protocol.amqp.AMQPPublisher;
 
 /**
- * This is the GUI for AMQP Publisher
+ * This is the GUI for AMQP Publisher.
  */
 public class AMQPPublisherGui extends AMQPSamplerGui {
 
@@ -38,7 +38,7 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
 
     private final ArgumentsPanel headers = new ArgumentsPanel("Headers");
 
-	private JPanel mainPanel;
+    private JPanel mainPanel;
 
     public AMQPPublisherGui() {
         init();
@@ -63,7 +63,9 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
     @Override
     public void configure(TestElement element) {
         super.configure(element);
-        if (!(element instanceof AMQPPublisher)) return;
+        if (!(element instanceof AMQPPublisher)) {
+            return;
+        }
         AMQPPublisher sampler = (AMQPPublisher) element;
 
         persistent.setSelected(sampler.getPersistent());
@@ -146,10 +148,10 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
         JPanel messagePanel = new JPanel(new GridBagLayout());
         messagePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Message"));
 
-		JPanel optionsPanel = new HorizontalPanel();
-		optionsPanel.add(persistent);
-		optionsPanel.add(useTx);
-		messagePanel.add(optionsPanel, constraints);
+        JPanel optionsPanel = new HorizontalPanel();
+        optionsPanel.add(persistent);
+        optionsPanel.add(useTx);
+        messagePanel.add(optionsPanel, constraints);
 
         messagePanel.add(initMessagePropertyPanel(), constraints);
         message.setPreferredSize(new Dimension(400, 200));
@@ -200,7 +202,7 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
         contentEncoding.setText("utf-8");
         messageId.setText("");
         message.setText("");
-		headers.clearGui();
+        headers.clearGui();
     }
 
     private void configureHeaders(AMQPPublisher sampler) {

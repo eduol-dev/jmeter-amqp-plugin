@@ -25,14 +25,14 @@ import com.rabbitmq.client.ConnectionFactory;
 
 public abstract class AMQPSampler extends AbstractSampler implements ThreadListener {
 
-	private static final Logger log = LoggerFactory.getLogger(AMQPSampler.class);
+    private static final Logger log = LoggerFactory.getLogger(AMQPSampler.class);
 
-	public static final String[] EXCHANGE_TYPES = new String[] {
-			"direct",
-			"topic",
-			"headers",
-			"fanout"
-	};
+    public static final String[] EXCHANGE_TYPES = new String[] {
+        "direct",
+        "topic",
+        "headers",
+        "fanout"
+    };
 
     public static final boolean DEFAULT_EXCHANGE_DURABLE = true;
     public static final boolean DEFAULT_EXCHANGE_AUTO_DELETE = true;
@@ -56,7 +56,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     protected static final String EXCHANGE_TYPE         = "AMQPSampler.ExchangeType";
     protected static final String EXCHANGE_DURABLE      = "AMQPSampler.ExchangeDurable";
     protected static final String EXCHANGE_REDECLARE    = "AMQPSampler.ExchangeRedeclare";
-    protected static final String EXCHANGE_AUTO_DELETE 	= "AMQPSampler.ExchangeAutoDelete";
+    protected static final String EXCHANGE_AUTO_DELETE  = "AMQPSampler.ExchangeAutoDelete";
     protected static final String QUEUE                 = "AMQPSampler.Queue";
     protected static final String ROUTING_KEY           = "AMQPSampler.RoutingKey";
     protected static final String VIRTUAL_HOST          = "AMQPSampler.VirtualHost";
@@ -123,11 +123,11 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
                 }
 
                 log.info("bound to:"
-                    +"\n\t queue: " + getQueue()
-                    +"\n\t exchange: " + getExchange()
-                    +"\n\t exchange(D)? " + getExchangeDurable()
-                    +"\n\t routing key: " + getRoutingKey()
-                    +"\n\t arguments: " + getQueueArguments()
+                    + "\n\t queue: " + getQueue()
+                    + "\n\t exchange: " + getExchange()
+                    + "\n\t exchange(D)? " + getExchangeDurable()
+                    + "\n\t routing key: " + getRoutingKey()
+                    + "\n\t arguments: " + getQueueArguments()
                 );
             }
         } catch (Exception ex) {
@@ -141,14 +141,17 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     private Map<String, Object> getQueueArguments() {
         Map<String, Object> arguments = new HashMap<String, Object>();
 
-        if (getMessageTTL() != null && !getMessageTTL().isEmpty())
+        if (getMessageTTL() != null && !getMessageTTL().isEmpty()) {
             arguments.put("x-message-ttl", getMessageTTLAsInt());
+        }
 
-        if (getMessageExpires() != null && !getMessageExpires().isEmpty())
+        if (getMessageExpires() != null && !getMessageExpires().isEmpty()) {
             arguments.put("x-expires", getMessageExpiresAsInt());
+        }
 
-        if (getMaxPriority() != null && !getMaxPriority().isEmpty())
+        if (getMaxPriority() != null && !getMaxPriority().isEmpty()) {
             arguments.put("x-max-priority", getMaxPriorityAsInt());
+        }
 
         return arguments;
     }
@@ -427,8 +430,9 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     protected void cleanup() {
         try {
             // getChannel().close();   // closing the connection will close the channel if it's still open
-            if (connection != null && connection.isOpen())
+            if (connection != null && connection.isOpen()) {
                 connection.close();
+            }
         } catch (IOException e) {
             log.error("Failed to close connection", e);
         }
@@ -459,14 +463,14 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
                 }
 
                 log.info("RabbitMQ ConnectionFactory using:"
-                      +"\n\t virtual host: " + getVirtualHost()
-                      +"\n\t host: " + getHost()
-                      +"\n\t port: " + getPort()
-                      +"\n\t username: " + getUsername()
-                      +"\n\t password: " + getPassword()
-                      +"\n\t timeout: " + getTimeout()
-                      +"\n\t heartbeat: " + factory.getRequestedHeartbeat()
-                      +"\nin " + this
+                      + "\n\t virtual host: " + getVirtualHost()
+                      + "\n\t host: " + getHost()
+                      + "\n\t port: " + getPort()
+                      + "\n\t username: " + getUsername()
+                      + "\n\t password: " + getPassword()
+                      + "\n\t timeout: " + getTimeout()
+                      + "\n\t heartbeat: " + factory.getRequestedHeartbeat()
+                      + "\nin " + this
                 );
 
                 String[] hosts = getHost().split(",");
@@ -487,7 +491,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
              }
 
              return channel;
-         } catch(Exception ex) {
+         } catch (Exception ex) {
              log.debug(ex.toString(), ex);
              return null;
          }
@@ -500,7 +504,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
         try {
             log.info("Deleting queue " + getQueue());
             channel.queueDelete(getQueue());
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             log.debug(ex.toString(), ex);
             // ignore it
         } finally {
@@ -517,7 +521,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
         try {
             log.info("Deleting exchange " + getExchange());
             channel.exchangeDelete(getExchange());
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             log.debug(ex.toString(), ex);
             // ignore it
         } finally {

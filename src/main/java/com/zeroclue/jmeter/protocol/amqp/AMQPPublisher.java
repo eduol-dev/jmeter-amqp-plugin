@@ -35,25 +35,25 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
 
     private static final long serialVersionUID = -8420658040465788497L;
 
-	private static final Logger log = LoggerFactory.getLogger(AMQPPublisher.class);
+    private static final Logger log = LoggerFactory.getLogger(AMQPPublisher.class);
 
     //++ These are JMX names, and must not be changed
-    private final static String MESSAGE             = "AMQPPublisher.Message";
-    private final static String MESSAGE_ROUTING_KEY = "AMQPPublisher.MessageRoutingKey";
-    private final static String MESSAGE_TYPE        = "AMQPPublisher.MessageType";
-    private final static String REPLY_TO_QUEUE      = "AMQPPublisher.ReplyToQueue";
-    private final static String CONTENT_TYPE        = "AMQPPublisher.ContentType";
-    private final static String CORRELATION_ID      = "AMQPPublisher.CorrelationId";
+    private static final String MESSAGE             = "AMQPPublisher.Message";
+    private static final String MESSAGE_ROUTING_KEY = "AMQPPublisher.MessageRoutingKey";
+    private static final String MESSAGE_TYPE        = "AMQPPublisher.MessageType";
+    private static final String REPLY_TO_QUEUE      = "AMQPPublisher.ReplyToQueue";
+    private static final String CONTENT_TYPE        = "AMQPPublisher.ContentType";
+    private static final String CORRELATION_ID      = "AMQPPublisher.CorrelationId";
     private static final String CONTENT_ENCODING    = "AMQPPublisher.ContentEncoding";
-    private final static String MESSAGE_ID          = "AMQPPublisher.MessageId";
-    private final static String MESSAGE_PRIORITY    = "AMQPPublisher.MessagePriority";
-    private final static String HEADERS             = "AMQPPublisher.Headers";
+    private static final String MESSAGE_ID          = "AMQPPublisher.MessageId";
+    private static final String MESSAGE_PRIORITY    = "AMQPPublisher.MessagePriority";
+    private static final String HEADERS             = "AMQPPublisher.Headers";
 
     public static boolean DEFAULT_PERSISTENT        = false;
-    private final static String PERSISTENT          = "AMQPPublisher.Persistent";
+    private static final String PERSISTENT          = "AMQPPublisher.Persistent";
 
     public static boolean DEFAULT_USE_TX            = false;
-    private final static String USE_TX              = "AMQPPublisher.UseTx";
+    private static final String USE_TX              = "AMQPPublisher.UseTx";
 
     public static final int DEFAULT_MESSAGE_PRIORITY = 0;
     public static final String DEFAULT_RESPONSE_CODE = "500";
@@ -187,11 +187,11 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
     }
 
     public String getContentType() {
-    	return getPropertyAsString(CONTENT_TYPE);
+        return getPropertyAsString(CONTENT_TYPE);
     }
 
     public void setContentType(String contentType) {
-    	setProperty(CONTENT_TYPE, contentType);
+        setProperty(CONTENT_TYPE, contentType);
     }
 
     public void setContentEncoding(String contentEncoding) {

@@ -21,9 +21,9 @@ import com.rabbitmq.client.ShutdownSignalException;
 
 public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStateListener {
 
-	private static final long serialVersionUID = 7480863561320459091L;
+    private static final long serialVersionUID = 7480863561320459091L;
 
-	private static final Logger log = LoggerFactory.getLogger(AMQPConsumer.class);
+    private static final Logger log = LoggerFactory.getLogger(AMQPConsumer.class);
 
     private static final int DEFAULT_PREFETCH_COUNT = 0;    // unlimited
     public static final boolean DEFAULT_READ_RESPONSE = true;
@@ -42,8 +42,8 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
     public static final String ROUTING_KEY_PARAMETER    = "Routing Key";
     public static final String DELIVERY_TAG_PARAMETER   = "Delivery Tag";
 
-	public static boolean DEFAULT_USE_TX = false;
-	private final static String USE_TX = "AMQPConsumer.UseTx";
+    public static boolean DEFAULT_USE_TX = false;
+    private static final String USE_TX = "AMQPConsumer.UseTx";
 
     private transient Channel channel;
     private transient QueueingConsumer consumer;
@@ -113,14 +113,15 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
                     result.setSamplerData("Read response is false.");
                 }
 
-                if (!autoAck())
+                if (!autoAck()) {
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+                }
             }
 
-			// commit the sample
-			if (getUseTx()) {
-				channel.txCommit();
-			}
+            // commit the sample
+            if (getUseTx()) {
+                channel.txCommit();
+            }
 
             /*
              * Set up the sample result details
@@ -243,13 +244,13 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         return getPropertyAsInt(PREFETCH_COUNT);
     }
 
-	public Boolean getUseTx() {
-		return getPropertyAsBoolean(USE_TX, DEFAULT_USE_TX);
-	}
+    public Boolean getUseTx() {
+        return getPropertyAsBoolean(USE_TX, DEFAULT_USE_TX);
+    }
 
-	public void setUseTx(Boolean tx) {
-		setProperty(USE_TX, tx);
-	}
+    public void setUseTx(Boolean tx) {
+        setProperty(USE_TX, tx);
+    }
 
     /**
      * set whether the sampler should read the response or not
@@ -321,7 +322,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
             if (consumerTag != null) {
                 channel.basicCancel(consumerTag);
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             log.error("Couldn't safely cancel the sample " + consumerTag, e);
         }
 
@@ -329,7 +330,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
     }
 
     /**
-     * Helper method
+     * Helper method.
      */
     private void trace(String s) {
         String tl = getTitle();
@@ -342,9 +343,9 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         boolean ret = super.initChannel();
         channel.basicQos(getPrefetchCountAsInt());
 
-		if (getUseTx()) {
-			channel.txSelect();
-		}
+        if (getUseTx()) {
+            channel.txSelect();
+        }
 
         return ret;
     }
@@ -354,8 +355,8 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         StringBuilder sb = new StringBuilder();
 
         sb.append(TIMESTAMP_PARAMETER).append(": ")
-                .append(delivery.getProperties().getTimestamp() != null ?
-                        delivery.getProperties().getTimestamp().getTime() : "").append("\n");
+                .append(delivery.getProperties().getTimestamp() != null
+                    ? delivery.getProperties().getTimestamp().getTime() : "").append("\n");
         sb.append(EXCHANGE_PARAMETER).append(": ").append(delivery.getEnvelope().getExchange()).append("\n");
         sb.append(ROUTING_KEY_PARAMETER).append(": ").append(delivery.getEnvelope().getRoutingKey()).append("\n");
         sb.append(DELIVERY_TAG_PARAMETER).append(": ").append(delivery.getEnvelope().getDeliveryTag()).append("\n");

@@ -1,6 +1,5 @@
 package com.zeroclue.jmeter.protocol.amqp.gui;
 
-import java.awt.*;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
@@ -11,14 +10,14 @@ import org.apache.jorphan.gui.JLabeledTextField;
 import com.zeroclue.jmeter.protocol.amqp.AMQPConsumer;
 
 /**
- * This is the GUI for AMQP Consumer
+ * This is the GUI for AMQP Consumer.
  */
 public class AMQPConsumerGui extends AMQPSamplerGui {
 
     private static final long serialVersionUID = 1L;
 
-	private final JLabeledTextField receiveTimeout = new JLabeledTextField("Receive Timeout");
-	private final JLabeledTextField prefetchCount = new JLabeledTextField("   Prefetch Count");
+    private final JLabeledTextField receiveTimeout = new JLabeledTextField("Receive Timeout");
+    private final JLabeledTextField prefetchCount = new JLabeledTextField("   Prefetch Count");
 
     private final JCheckBox purgeQueue = new JCheckBox("Purge Queue", false);
     private final JCheckBox autoAck = new JCheckBox("Auto ACK", true);
@@ -31,18 +30,18 @@ public class AMQPConsumerGui extends AMQPSamplerGui {
         init();
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getLabelResource() {
-		return this.getClass().getSimpleName();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getLabelResource() {
+        return this.getClass().getSimpleName();
+    }
 
-	@Override
-	public String getStaticLabel() {
-		return "AMQP Consumer";
-	}
+    @Override
+    public String getStaticLabel() {
+        return "AMQP Consumer";
+    }
 
     /*
      * Helper method to set up the GUI screen
@@ -50,22 +49,22 @@ public class AMQPConsumerGui extends AMQPSamplerGui {
     protected void init() {
         super.init();
 
-		//prefetchCount.setPreferredSize(new Dimension(100,25));
+        //prefetchCount.setPreferredSize(new Dimension(100,25));
         //useTx.setPreferredSize(new Dimension(100,25));
 
-		JPanel optionsPanel = new HorizontalPanel();
-		optionsPanel.add(purgeQueue);
-		optionsPanel.add(autoAck);
-		optionsPanel.add(readResponse);
-		optionsPanel.add(useTx);
+        JPanel optionsPanel = new HorizontalPanel();
+        optionsPanel.add(purgeQueue);
+        optionsPanel.add(autoAck);
+        optionsPanel.add(readResponse);
+        optionsPanel.add(useTx);
 
         mainPanel.add(receiveTimeout);
         mainPanel.add(prefetchCount);
-		mainPanel.add(optionsPanel);
+        mainPanel.add(optionsPanel);
 
-		optionsPanel.setPreferredSize(optionsPanel.getPreferredSize());
-		optionsPanel.validate();
-		//optionsPanel.repaint();
+        optionsPanel.setPreferredSize(optionsPanel.getPreferredSize());
+        optionsPanel.validate();
+        //optionsPanel.repaint();
     }
 
     /**
@@ -74,7 +73,9 @@ public class AMQPConsumerGui extends AMQPSamplerGui {
     @Override
     public void configure(TestElement element) {
         super.configure(element);
-        if (!(element instanceof AMQPConsumer)) return;
+        if (!(element instanceof AMQPConsumer)) {
+            return;
+        }
         AMQPConsumer sampler = (AMQPConsumer) element;
 
         readResponse.setSelected(sampler.getReadResponseAsBoolean());
