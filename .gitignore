@@ -5,7 +5,7 @@
 .DS_Store
 stats/
 target/
-gc.log
+*.log
 lib/
 /nbproject/private/
 /build/
