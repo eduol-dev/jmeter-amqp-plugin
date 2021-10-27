@@ -1,6 +1,7 @@
 package com.zeroclue.jmeter.protocol.amqp;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
@@ -23,13 +24,13 @@ import com.rabbitmq.client.Channel;
 
 /**
  * JMeter creates an instance of a sampler class for every occurrence of the
- * element in every thread. [some additional copies may be created before the
- * test run starts]
+ * element in every thread. Some additional copies may be created before the
+ * test run starts.
  *
- * Thus each sampler is guaranteed to be called by a single thread - there is no
+ * <p>Thus each sampler is guaranteed to be called by a single thread - there is no
  * need to synchronize access to instance variables.
  *
- * However, access to class fields must be synchronized.
+ * <p>However, access to class fields must be synchronized.
  */
 public class AMQPPublisher extends AMQPSampler implements Interruptible {
 
@@ -139,7 +140,7 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
     }
 
     private byte[] getMessageBytes() {
-        return getMessage().getBytes();
+        return getMessage().getBytes(StandardCharsets.UTF_8);
     }
 
     /**
@@ -194,12 +195,12 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
         setProperty(CONTENT_TYPE, contentType);
     }
 
-    public void setContentEncoding(String contentEncoding) {
-        setProperty(CONTENT_ENCODING, contentEncoding);
-    }
-
     public String getContentEncoding() {
         return getPropertyAsString(CONTENT_ENCODING);
+    }
+
+    public void setContentEncoding(String contentEncoding) {
+        setProperty(CONTENT_ENCODING, contentEncoding);
     }
 
     /**

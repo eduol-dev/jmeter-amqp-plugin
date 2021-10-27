@@ -99,16 +99,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
                 channel = createChannel();
                 setChannel(channel);
 
-                //TODO: Break out queue binding
-                boolean queueConfigured = (getQueue() != null && !getQueue().isEmpty());
-
-                if (queueConfigured) {
-                    if (getQueueRedeclare()) {
-                        deleteQueue();
-                    }
-
-                    AMQP.Queue.DeclareOk declareQueueResp = channel.queueDeclare(getQueue(), queueDurable(), queueExclusive(), queueAutoDelete(), getQueueArguments());
-                }
+                boolean queueConfigured = configureQueue(channel);
 
                 if (!StringUtils.isBlank(getExchange())) {   // use a named exchange
                     if (getExchangeRedeclare()) {
@@ -136,6 +127,19 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
         }
 
         return true;
+    }
+
+    protected boolean configureQueue(Channel channel) throws IOException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
+        boolean queueConfigured = (getQueue() != null && !getQueue().isEmpty());
+
+        if (queueConfigured) {
+            if (getQueueRedeclare()) {
+                deleteQueue();
+            }
+
+            AMQP.Queue.DeclareOk declareQueueResp = channel.queueDeclare(getQueue(), queueDurable(), queueExclusive(), queueAutoDelete(), getQueueArguments());
+        }
+        return queueConfigured;
     }
 
     private Map<String, Object> getQueueArguments() {

@@ -75,6 +75,7 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
         messageType.setText(sampler.getMessageType());
         replyToQueue.setText(sampler.getReplyToQueue());
         contentType.setText(sampler.getContentType());
+        contentEncoding.setText(sampler.getContentEncoding());
         correlationId.setText(sampler.getCorrelationId());
         messagePriority.setText(sampler.getMessagePriority());
         messageId.setText(sampler.getMessageId());

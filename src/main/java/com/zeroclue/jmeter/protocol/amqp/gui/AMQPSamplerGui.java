@@ -31,10 +31,10 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
     protected JLabeledTextField messageTTL = new JLabeledTextField("Message TTL");
     protected JLabeledTextField messageExpires = new JLabeledTextField("           Expires");
     protected JLabeledTextField maxPriority = new JLabeledTextField("   Max Priority");
-    private final JCheckBox queueDurable = new JCheckBox("Durable", true);
-    private final JCheckBox queueRedeclare = new JCheckBox("Redeclare", AMQPSampler.DEFAULT_QUEUE_REDECLARE);
-    private final JCheckBox queueExclusive = new JCheckBox("Exclusive", true);
-    private final JCheckBox queueAutoDelete = new JCheckBox("Auto Delete", true);
+    protected final JCheckBox queueDurable = new JCheckBox("Durable", true);
+    protected final JCheckBox queueRedeclare = new JCheckBox("Redeclare", AMQPSampler.DEFAULT_QUEUE_REDECLARE);
+    protected final JCheckBox queueExclusive = new JCheckBox("Exclusive", true);
+    protected final JCheckBox queueAutoDelete = new JCheckBox("Auto Delete", true);
 
     protected JLabeledTextField virtualHost = new JLabeledTextField("Virtual Host");
     protected JLabeledTextField host = new JLabeledTextField("             Host");
@@ -44,7 +44,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
     protected JLabeledTextField password = new JLabeledTextField("  Password");
     private final JCheckBox ssl = new JCheckBox("SSL", false);
 
-    private final JLabeledTextField iterations = new JLabeledTextField("Number of Samples to Aggregate");
+    protected final JLabeledTextField iterations = new JLabeledTextField("Number of Samples to Aggregate");
 
     protected abstract void setMainPanel(JPanel panel);
 
@@ -196,7 +196,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         // Exchange section
 
         JPanel exchangeSettings = new JPanel(new GridBagLayout());
-        exchangeSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Exchange"));
+        exchangeSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), getExchangeSettingsLabel()));
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -226,7 +226,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         // Queue section
 
         JPanel queueSettings = new JPanel(new GridBagLayout());
-        queueSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Queue"));
+        queueSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), getQueueSettingsLabel()));
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         queueSettings.add(queue, gridBagConstraints);
@@ -275,7 +275,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         // Connection section
 
         JPanel serverSettings = new JPanel(new GridBagLayout());
-        serverSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Connection"));
+        serverSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), getConnectionSettingsLabel()));
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -313,4 +313,15 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         return commonPanel;
     }
 
+    protected String getExchangeSettingsLabel() {
+        return "Exchange";
+    }
+
+    protected String getQueueSettingsLabel() {
+        return "Queue";
+    }
+
+    protected String getConnectionSettingsLabel() {
+        return "Connection";
+    }
 }
