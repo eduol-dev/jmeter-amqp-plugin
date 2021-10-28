@@ -90,8 +90,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
 
         try {
             if (channel != null && !channel.isOpen()) {
-                log.warn("channel " + channel.getChannelNumber()
-                        + " closed unexpectedly: ", channel.getCloseReason());
+                log.warn("Channel {} closed unexpectedly: {}", channel.getChannelNumber(), channel.getCloseReason());
                 channel = null;     // so we re-open it below
             }
 
@@ -453,7 +452,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     }
 
     protected Channel createChannel() throws IOException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
-         log.info("Creating channel " + getVirtualHost() + ":" + getPortAsInt());
+         log.info("Creating channel {}:{}", getVirtualHost(), getPortAsInt());
 
          try {
              if (connection == null || !connection.isOpen()) {
@@ -484,14 +483,14 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
                     addresses[i] = new Address(hosts[i], getPortAsInt());
                 }
 
-                log.info("Using hosts: " + Arrays.toString(hosts) + " addresses: " + Arrays.toString(addresses));
+                log.info("Using hosts: {} addresses: {}", Arrays.toString(hosts), Arrays.toString(addresses));
                 connection = factory.newConnection(addresses);
              }
 
              Channel channel = connection.createChannel();
 
              if (!channel.isOpen()) {
-                 log.error("Failed to open channel: " + channel.getCloseReason().getLocalizedMessage());
+                 log.error("Failed to open channel: {}", channel.getCloseReason().getLocalizedMessage());
              }
 
              return channel;
@@ -506,14 +505,18 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
         Channel channel = createChannel();
 
         try {
-            log.info("Deleting queue " + getQueue());
+            log.info("Deleting queue {}", getQueue());
             channel.queueDelete(getQueue());
         } catch (Exception ex) {
             log.debug(ex.toString(), ex);
             // ignore it
         } finally {
             if (channel.isOpen()) {
-                channel.close();
+                try {
+                    channel.close();
+                } catch (TimeoutException e) {
+                    log.error("Timeout Exception: cannot close channel", e);
+                }
             }
         }
     }
@@ -523,14 +526,18 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
         Channel channel = createChannel();
 
         try {
-            log.info("Deleting exchange " + getExchange());
+            log.info("Deleting exchange {}", getExchange());
             channel.exchangeDelete(getExchange());
         } catch (Exception ex) {
             log.debug(ex.toString(), ex);
             // ignore it
         } finally {
             if (channel.isOpen()) {
-                channel.close();
+                try {
+                    channel.close();
+                } catch (TimeoutException e) {
+                    log.error("Timeout Exception: cannot close channel", e);
+                }
             }
         }
     }

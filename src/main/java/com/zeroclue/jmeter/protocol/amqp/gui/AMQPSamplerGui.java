@@ -1,7 +1,13 @@
 package com.zeroclue.jmeter.protocol.amqp.gui;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -158,8 +164,8 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
 
         sampler.setIterations(iterations.getText());
 
-        log.debug("AMQPSamplerGui.modifyTestElement() called, set user/pass to "
-            + username.getText() + "/" + password.getText() + " on sampler " + sampler);
+        log.debug("AMQPSamplerGui.modifyTestElement() called, set user/pass to {}/{} on sampler {}",
+            username.getText(), password.getText(), sampler);
     }
 
     protected void init() {

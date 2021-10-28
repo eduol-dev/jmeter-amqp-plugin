@@ -134,5 +134,4 @@ public class AMQPConsumerGui extends AMQPSamplerGui {
     protected void setMainPanel(JPanel panel) {
         mainPanel = panel;
     }
-
 }

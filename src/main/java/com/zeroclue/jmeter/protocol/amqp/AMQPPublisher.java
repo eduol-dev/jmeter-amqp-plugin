@@ -332,7 +332,10 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
         StringBuilder sb = new StringBuilder();
 
         for (String key : headers.keySet()) {
-            sb.append(key).append(": ").append(headers.get(key)).append("\n");
+            sb.append(key)
+                .append(": ")
+                .append(headers.get(key))
+                .append("\n");
         }
 
         return sb.toString();

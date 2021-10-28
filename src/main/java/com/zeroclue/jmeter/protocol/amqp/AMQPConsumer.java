@@ -67,7 +67,6 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
 
         try {
             initChannel();
-
             // only do this once per thread, otherwise it slows down the consumption by appx 50%
             if (consumer == null) {
                 log.info("Creating consumer");
@@ -98,7 +97,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
                 delivery = consumer.nextDelivery(getReceiveTimeoutAsInt());
 
                 if (delivery == null) {
-                    result.setResponseMessage("timed out");
+                    result.setResponseMessage("Timed out");
                     return result;
                 }
 
@@ -150,7 +149,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         } catch (InterruptedException e) {
             consumer = null;
             consumerTag = null;
-            log.info("interuppted while attempting to consume");
+            log.info("Interupted while attempting to consume");
             result.setResponseCode("200");
             result.setResponseMessage(e.getMessage());
         } catch (IOException e) {
@@ -253,21 +252,21 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
     }
 
     /**
-     * set whether the sampler should read the response or not
-     *
-     * @param read whether the sampler should read the response or not
-     */
-    public void setReadResponse(Boolean read) {
-        setProperty(READ_RESPONSE, read);
-    }
-
-    /**
      * return whether the sampler should read the response
      *
      * @return whether the sampler should read the response
      */
     public String getReadResponse() {
         return getPropertyAsString(READ_RESPONSE);
+    }
+
+    /**
+     * set whether the sampler should read the response or not
+     *
+     * @param read whether the sampler should read the response or not
+     */
+    public void setReadResponse(Boolean read) {
+        setProperty(READ_RESPONSE, read);
     }
 
     /**
@@ -292,7 +291,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
     public void testEnded() {
 
         if (purgeQueue()) {
-            log.info("Purging queue " + getQueue());
+            log.info("Purging queue {}", getQueue());
 
             try {
                 channel.queuePurge(getQueue());
@@ -336,7 +335,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         String tl = getTitle();
         String tn = Thread.currentThread().getName();
         String th = this.toString();
-        log.debug(tn + " " + tl + " " + s + " " + th);
+        log.debug("{} {} {} {}", tn, tl, s, th);
     }
 
     protected boolean initChannel() throws IOException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
@@ -354,15 +353,25 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         Map<String, Object> headers = delivery.getProperties().getHeaders();
         StringBuilder sb = new StringBuilder();
 
-        sb.append(TIMESTAMP_PARAMETER).append(": ")
-                .append(delivery.getProperties().getTimestamp() != null
-                    ? delivery.getProperties().getTimestamp().getTime() : "").append("\n");
-        sb.append(EXCHANGE_PARAMETER).append(": ").append(delivery.getEnvelope().getExchange()).append("\n");
-        sb.append(ROUTING_KEY_PARAMETER).append(": ").append(delivery.getEnvelope().getRoutingKey()).append("\n");
+        sb.append(TIMESTAMP_PARAMETER)
+            .append(": ")
+            .append(delivery.getProperties().getTimestamp() != null ? delivery.getProperties().getTimestamp().getTime() : "")
+            .append("\n");
+        sb.append(EXCHANGE_PARAMETER)
+            .append(": ")
+            .append(delivery.getEnvelope().getExchange())
+            .append("\n");
+        sb.append(ROUTING_KEY_PARAMETER)
+            .append(": ")
+            .append(delivery.getEnvelope().getRoutingKey())
+            .append("\n");
         sb.append(DELIVERY_TAG_PARAMETER).append(": ").append(delivery.getEnvelope().getDeliveryTag()).append("\n");
 
         for (String key : headers.keySet()) {
-            sb.append(key).append(": ").append(headers.get(key)).append("\n");
+            sb.append(key)
+                .append(": ")
+                .append(headers.get(key))
+                .append("\n");
         }
 
         return sb.toString();
