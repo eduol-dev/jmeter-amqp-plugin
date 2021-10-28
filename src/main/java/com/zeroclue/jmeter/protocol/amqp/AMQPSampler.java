@@ -19,9 +19,11 @@ import org.apache.jmeter.testelement.ThreadListener;
 
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Address;
+import com.rabbitmq.client.AlreadyClosedException;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.ShutdownSignalException;
 
 public abstract class AMQPSampler extends AbstractSampler implements ThreadListener {
 
@@ -438,6 +440,10 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
             }
         } catch (IOException e) {
             log.error("Failed to close connection", e);
+        } catch (AlreadyClosedException e) {
+            log.error("Connection already closed", e);
+        } catch (ShutdownSignalException e) {
+            log.error("Connection shutdown by thread close", e);
         }
     }
 
