@@ -53,6 +53,8 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     public static final int DEFAULT_MIN_PRIORITY = 0;
     public static final int DEFAULT_MAX_PRIORITY = 255;
 
+    private static final int DEFAULT_HEARTBEAT = 1;
+
     //++ These are JMX names, and must not be changed
     protected static final String EXCHANGE              = "AMQPSampler.Exchange";
     protected static final String EXCHANGE_TYPE         = "AMQPSampler.ExchangeType";
@@ -76,8 +78,6 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     private static final String QUEUE_REDECLARE         = "AMQPSampler.Redeclare";
     private static final String QUEUE_EXCLUSIVE         = "AMQPSampler.QueueExclusive";
     private static final String QUEUE_AUTO_DELETE       = "AMQPSampler.QueueAutoDelete";
-
-    private static final int DEFAULT_HEARTBEAT = 1;
 
     private final transient ConnectionFactory factory;
     private transient Connection connection;
@@ -305,7 +305,8 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     }
 
     protected Integer getMaxPriorityAsInt() {
-        // The message priority field is defined as an unsigned byte, so in practice priorities should be between 0 and 255
+        // The message priority field is defined as an unsigned byte,
+        // so in practice priorities should be between 0 and 255
         if (getPropertyAsInt(MAX_PRIORITY) < DEFAULT_MIN_PRIORITY) {
             return DEFAULT_MIN_PRIORITY;
         } else if (getPropertyAsInt(MAX_PRIORITY) > DEFAULT_MAX_PRIORITY) {

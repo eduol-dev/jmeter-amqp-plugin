@@ -58,6 +58,8 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
 
     public static final int DEFAULT_MESSAGE_PRIORITY = 0;
     public static final String DEFAULT_RESPONSE_CODE = "500";
+    public static final String DEFAULT_CONTENT_TYPE  = "text/plain";
+    public static final String DEFAULT_ENCODING      = "utf-8";
 
     private transient Channel channel;
 
@@ -236,7 +238,11 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
         setProperty(MESSAGE_PRIORITY, content);
     }
 
-    public int getMessagePriorityAsInt() {
+    protected int getMessagePriorityAsInt() {
+        if (getPropertyAsInt(MESSAGE_PRIORITY) < 0) {
+            return 0;
+        }
+
         return getPropertyAsInt(MESSAGE_PRIORITY);
     }
 
@@ -283,7 +289,7 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
     protected AMQP.BasicProperties getProperties() {
         final AMQP.BasicProperties.Builder builder = new AMQP.BasicProperties.Builder();
         final int deliveryMode = getPersistent() ? 2 : 1;
-        final String contentType = StringUtils.defaultIfEmpty(getContentType(), "text/plain");
+        final String contentType = StringUtils.defaultIfEmpty(getContentType(), DEFAULT_CONTENT_TYPE);
 
         builder.contentType(contentType)
             .contentEncoding(getContentEncoding())

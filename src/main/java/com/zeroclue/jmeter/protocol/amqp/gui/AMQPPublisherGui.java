@@ -203,8 +203,8 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
         replyToQueue.setText("");
         correlationId.setText("");
         messagePriority.setText("");
-        contentType.setText("text/plain");
-        contentEncoding.setText("utf-8");
+        contentType.setText(AMQPPublisher.DEFAULT_CONTENT_TYPE);
+        contentEncoding.setText(AMQPPublisher.DEFAULT_ENCODING);
         messageId.setText("");
         message.setText("");
         headers.clearGui();
