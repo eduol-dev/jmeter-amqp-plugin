@@ -46,8 +46,9 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
     protected JLabeledTextField host = new JLabeledTextField("             Host");
     protected JLabeledTextField port = new JLabeledTextField("              Port");
     protected JLabeledTextField timeout = new JLabeledTextField("      Timeout");
-    protected JLabeledTextField username = new JLabeledTextField("  Username");
-    protected JLabeledTextField password = new JLabeledTextField("  Password");
+    protected JLabeledTextField username = new JLabeledTextField("   Username");
+    protected JLabeledTextField password = new JLabeledTextField("   Password");
+    protected JLabeledTextField heartbeat = new JLabeledTextField("  Heartbeat");
     private final JCheckBox ssl = new JCheckBox("SSL", false);
 
     protected final JLabeledTextField iterations = new JLabeledTextField("Number of Samples to Aggregate");
@@ -88,6 +89,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         username.setText(sampler.getUsername());
         password.setText(sampler.getPassword());
         timeout.setText(sampler.getTimeout());
+        heartbeat.setText(sampler.getHeartbeat());
         ssl.setSelected(sampler.connectionSSL());
 
         iterations.setText(sampler.getIterations());
@@ -112,10 +114,10 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         messageExpires.setText("");
         maxPriority.setText("");
 
-        queueDurable.setSelected(true);
+        queueDurable.setSelected(AMQPSampler.DEFAULT_QUEUE_DURABLE);
         queueRedeclare.setSelected(AMQPSampler.DEFAULT_QUEUE_REDECLARE);
-        queueAutoDelete.setSelected(false);
-        queueExclusive.setSelected(false);
+        queueAutoDelete.setSelected(AMQPSampler.DEFAULT_QUEUE_AUTO_DELETE);
+        queueExclusive.setSelected(AMQPSampler.DEFAULT_QUEUE_EXCLUSIVE);
 
         virtualHost.setText("/");
         host.setText("localhost");
@@ -123,6 +125,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         username.setText("guest");
         password.setText("guest");
         timeout.setText(AMQPSampler.DEFAULT_TIMEOUT_STRING);
+        heartbeat.setText(AMQPSampler.DEFAULT_HEARTBEAT_STRING);
         ssl.setSelected(false);
 
         iterations.setText(AMQPSampler.DEFAULT_ITERATIONS_STRING);
@@ -160,6 +163,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         sampler.setUsername(username.getText());
         sampler.setPassword(password.getText());
         sampler.setTimeout(timeout.getText());
+        sampler.setHeartbeat(heartbeat.getText());
         sampler.setConnectionSSL(ssl.isSelected());
 
         sampler.setIterations(iterations.getText());
@@ -309,6 +313,10 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
+        serverSettings.add(heartbeat, gridBagConstraints);
+
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
         serverSettings.add(ssl, gridBagConstraints);
 
         gridBagConstraintsCommon.gridx = 1;

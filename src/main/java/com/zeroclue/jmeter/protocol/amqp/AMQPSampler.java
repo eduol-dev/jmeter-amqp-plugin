@@ -36,10 +36,16 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
         "fanout"
     };
 
+    public static final String DEFAULT_SSL_PROTOCOL = "TLS";
+
     public static final boolean DEFAULT_EXCHANGE_DURABLE = true;
     public static final boolean DEFAULT_EXCHANGE_AUTO_DELETE = true;
     public static final boolean DEFAULT_EXCHANGE_REDECLARE = false;
+
+    public static final boolean DEFAULT_QUEUE_DURABLE = true;
+    public static final boolean DEFAULT_QUEUE_AUTO_DELETE = false;
     public static final boolean DEFAULT_QUEUE_REDECLARE = false;
+    public static final boolean DEFAULT_QUEUE_EXCLUSIVE = false;
 
     public static final int DEFAULT_PORT = 5672;
     public static final String DEFAULT_PORT_STRING = Integer.toString(DEFAULT_PORT);
@@ -53,7 +59,9 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     public static final int DEFAULT_MIN_PRIORITY = 0;
     public static final int DEFAULT_MAX_PRIORITY = 255;
 
-    private static final int DEFAULT_HEARTBEAT = 1;
+    // The value is in seconds, and default value suggested by RabbitMQ is 60.
+    public static final int DEFAULT_HEARTBEAT = 60;
+    public static final String DEFAULT_HEARTBEAT_STRING = Integer.toString(DEFAULT_HEARTBEAT);
 
     //++ These are JMX names, and must not be changed
     protected static final String EXCHANGE              = "AMQPSampler.Exchange";
@@ -69,6 +77,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     protected static final String SSL                   = "AMQPSampler.SSL";
     protected static final String USERNAME              = "AMQPSampler.Username";
     protected static final String PASSWORD              = "AMQPSampler.Password";
+    protected static final String HEARTBEAT             = "AMQPSampler.Heartbeat";
     private static final String TIMEOUT                 = "AMQPSampler.Timeout";
     private static final String ITERATIONS              = "AMQPSampler.Iterations";
     private static final String MESSAGE_TTL             = "AMQPSampler.MessageTTL";
@@ -368,6 +377,24 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
         setProperty(PASSWORD, name);
     }
 
+    public String getHeartbeat() {
+        return getPropertyAsString(HEARTBEAT);
+    }
+
+    public void setHeartbeat(String value) {
+        setProperty(HEARTBEAT, value);
+    }
+
+    public int getHeartbeatAsInt() {
+        int hb = getPropertyAsInt(HEARTBEAT);
+
+        if ((hb >= 0) && (hb <= 60)) {
+            return hb;
+        }
+
+        return DEFAULT_HEARTBEAT;
+    }
+
     /**
      * @return the whether the queue is durable
      */
@@ -467,19 +494,20 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
                 factory.setVirtualHost(getVirtualHost());
                 factory.setUsername(getUsername());
                 factory.setPassword(getPassword());
+                factory.setRequestedHeartbeat(getHeartbeatAsInt());
 
                 if (connectionSSL()) {
-                    factory.useSslProtocol("TLS");
+                    factory.useSslProtocol(DEFAULT_SSL_PROTOCOL);
                 }
 
-                log.info("RabbitMQ ConnectionFactory using:"
+                log.debug("RabbitMQ ConnectionFactory using:"
                       + "\n\t virtual host: " + getVirtualHost()
                       + "\n\t host: " + getHost()
                       + "\n\t port: " + getPort()
                       + "\n\t username: " + getUsername()
                       + "\n\t password: " + getPassword()
                       + "\n\t timeout: " + getTimeout()
-                      + "\n\t heartbeat: " + factory.getRequestedHeartbeat()
+                      + "\n\t heartbeat: " + getHeartbeatAsInt()
                       + "\nin " + this
                 );
 
