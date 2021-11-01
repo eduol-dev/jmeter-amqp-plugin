@@ -151,7 +151,7 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
         constraints.gridwidth = GridBagConstraints.REMAINDER;
 
         JPanel messagePanel = new JPanel(new GridBagLayout());
-        messagePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Message"));
+        messagePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), getMessageSettingsLabel()));
 
         JPanel optionsPanel = new HorizontalPanel();
         optionsPanel.add(persistent);
@@ -176,7 +176,7 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
         constraints.gridwidth = GridBagConstraints.REMAINDER;
 
         JPanel propertyPanel = new JPanel(new GridBagLayout());
-        propertyPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Properties"));
+        propertyPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), getPropertiesSettingsLabel()));
 
         propertyPanel.add(messageRoutingKey, constraints);
         propertyPanel.add(replyToQueue, constraints);
@@ -217,5 +217,13 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
         } else {
             headers.clearGui();
         }
+    }
+
+    protected String getMessageSettingsLabel() {
+        return "Message";
+    }
+
+    protected String getPropertiesSettingsLabel() {
+        return "Properties";
     }
 }

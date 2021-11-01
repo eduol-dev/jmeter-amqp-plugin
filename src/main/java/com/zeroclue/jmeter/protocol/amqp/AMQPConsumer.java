@@ -25,25 +25,27 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
 
     private static final Logger log = LoggerFactory.getLogger(AMQPConsumer.class);
 
-    private static final int DEFAULT_PREFETCH_COUNT = 0;    // unlimited
-    public static final boolean DEFAULT_READ_RESPONSE = true;
-    public static final String DEFAULT_PREFETCH_COUNT_STRING = Integer.toString(DEFAULT_PREFETCH_COUNT);
-    public static final String DEFAULT_RESPONSE_CODE = "500";
-
     //++ These are JMX names, and must not be changed
     private static final String PREFETCH_COUNT          = "AMQPConsumer.PrefetchCount";
     private static final String READ_RESPONSE           = "AMQPConsumer.ReadResponse";
     private static final String PURGE_QUEUE             = "AMQPConsumer.PurgeQueue";
     private static final String AUTO_ACK                = "AMQPConsumer.AutoAck";
     private static final String RECEIVE_TIMEOUT         = "AMQPConsumer.ReceiveTimeout";
+    private static final String USE_TX                  = "AMQPConsumer.UseTx";
 
     public static final String TIMESTAMP_PARAMETER      = "Timestamp";
     public static final String EXCHANGE_PARAMETER       = "Exchange";
     public static final String ROUTING_KEY_PARAMETER    = "Routing Key";
     public static final String DELIVERY_TAG_PARAMETER   = "Delivery Tag";
 
-    public static boolean DEFAULT_USE_TX = false;
-    private static final String USE_TX = "AMQPConsumer.UseTx";
+    public static final boolean DEFAULT_PURGE_QUEUE = false;
+    public static final boolean DEFAULT_AUTO_ACK = true;
+    public static final boolean DEFAULT_READ_RESPONSE = true;
+    public static final boolean DEFAULT_USE_TX = false;
+    private static final int DEFAULT_PREFETCH_COUNT = 0;    // unlimited
+    public static final String DEFAULT_PREFETCH_COUNT_STRING = Integer.toString(DEFAULT_PREFETCH_COUNT);
+    public static final String DEFAULT_RESPONSE_CODE = "500";
+    public static final String DEFAULT_RECEIVE_TIMEOUT = "";
 
     private transient Channel channel;
     private transient QueueingConsumer consumer;
@@ -149,7 +151,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         } catch (InterruptedException e) {
             consumer = null;
             consumerTag = null;
-            log.info("Interupted while attempting to consume");
+            log.warn("Interupted while attempting to consume");
             result.setResponseCode("200");
             result.setResponseMessage(e.getMessage());
         } catch (IOException e) {

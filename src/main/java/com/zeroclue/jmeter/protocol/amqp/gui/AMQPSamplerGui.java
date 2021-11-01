@@ -37,10 +37,10 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
     protected JLabeledTextField messageTTL = new JLabeledTextField("Message TTL");
     protected JLabeledTextField messageExpires = new JLabeledTextField("           Expires");
     protected JLabeledTextField maxPriority = new JLabeledTextField("   Max Priority");
-    protected final JCheckBox queueDurable = new JCheckBox("Durable", true);
+    protected final JCheckBox queueDurable = new JCheckBox("Durable", AMQPSampler.DEFAULT_QUEUE_DURABLE);
     protected final JCheckBox queueRedeclare = new JCheckBox("Redeclare", AMQPSampler.DEFAULT_QUEUE_REDECLARE);
-    protected final JCheckBox queueExclusive = new JCheckBox("Exclusive", true);
-    protected final JCheckBox queueAutoDelete = new JCheckBox("Auto Delete", true);
+    protected final JCheckBox queueExclusive = new JCheckBox("Exclusive", AMQPSampler.DEFAULT_QUEUE_EXCLUSIVE);
+    protected final JCheckBox queueAutoDelete = new JCheckBox("Auto Delete", AMQPSampler.DEFAULT_QUEUE_AUTO_DELETE);
 
     protected JLabeledTextField virtualHost = new JLabeledTextField("Virtual Host");
     protected JLabeledTextField host = new JLabeledTextField("             Host");
@@ -49,7 +49,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
     protected JLabeledTextField username = new JLabeledTextField("   Username");
     protected JLabeledTextField password = new JLabeledTextField("   Password");
     protected JLabeledTextField heartbeat = new JLabeledTextField("  Heartbeat");
-    private final JCheckBox ssl = new JCheckBox("SSL", false);
+    private final JCheckBox ssl = new JCheckBox("SSL", AMQPSampler.DEFAULT_SSL_STATE);
 
     protected final JLabeledTextField iterations = new JLabeledTextField("Number of Samples to Aggregate");
 
@@ -90,7 +90,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         password.setText(sampler.getPassword());
         timeout.setText(sampler.getTimeout());
         heartbeat.setText(sampler.getHeartbeat());
-        ssl.setSelected(sampler.connectionSSL());
+        ssl.setSelected(sampler.getConnectionSSL());
 
         iterations.setText(sampler.getIterations());
 
@@ -102,31 +102,31 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
      */
     @Override
     public void clearGui() {
-        exchange.setText("jmeterExchange");
-        exchangeType.setSelectedIndex(0);
+        exchange.setText(AMQPSampler.DEFAULT_EXCHANGE_NAME);
+        exchangeType.setSelectedIndex(AMQPSampler.DEFAULT_EXCHANGE_TYPE);
         exchangeDurable.setSelected(AMQPSampler.DEFAULT_EXCHANGE_DURABLE);
         exchangeRedeclare.setSelected(AMQPSampler.DEFAULT_EXCHANGE_REDECLARE);
         exchangeAutoDelete.setSelected(AMQPSampler.DEFAULT_EXCHANGE_AUTO_DELETE);
 
-        queue.setText("jmeterQueue");
-        routingKey.setText("jmeterRoutingKey");
-        messageTTL.setText("");
-        messageExpires.setText("");
-        maxPriority.setText("");
+        queue.setText(AMQPSampler.DEFAULT_QUEUE_NAME);
+        routingKey.setText(AMQPSampler.DEFAULT_ROUTING_KEY);
+        messageTTL.setText(AMQPSampler.DEFAULT_MSG_TTL);
+        messageExpires.setText(AMQPSampler.DEFAULT_MSG_EXPIRES);
+        maxPriority.setText(AMQPSampler.DEFAULT_MSG_PRIORITY);
 
         queueDurable.setSelected(AMQPSampler.DEFAULT_QUEUE_DURABLE);
         queueRedeclare.setSelected(AMQPSampler.DEFAULT_QUEUE_REDECLARE);
         queueAutoDelete.setSelected(AMQPSampler.DEFAULT_QUEUE_AUTO_DELETE);
         queueExclusive.setSelected(AMQPSampler.DEFAULT_QUEUE_EXCLUSIVE);
 
-        virtualHost.setText("/");
-        host.setText("localhost");
+        virtualHost.setText(AMQPSampler.DEFAULT_VIRTUAL_HOST);
+        host.setText(AMQPSampler.DEFAULT_HOSTNAME);
         port.setText(AMQPSampler.DEFAULT_PORT_STRING);
-        username.setText("guest");
-        password.setText("guest");
+        username.setText(AMQPSampler.DEFAULT_USERNAME);
+        password.setText(AMQPSampler.DEFAULT_PASSWORD);
         timeout.setText(AMQPSampler.DEFAULT_TIMEOUT_STRING);
         heartbeat.setText(AMQPSampler.DEFAULT_HEARTBEAT_STRING);
-        ssl.setSelected(false);
+        ssl.setSelected(AMQPSampler.DEFAULT_SSL_STATE);
 
         iterations.setText(AMQPSampler.DEFAULT_ITERATIONS_STRING);
     }

@@ -29,40 +29,6 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
 
     private static final Logger log = LoggerFactory.getLogger(AMQPSampler.class);
 
-    public static final String[] EXCHANGE_TYPES = new String[] {
-        "direct",
-        "topic",
-        "headers",
-        "fanout"
-    };
-
-    public static final String DEFAULT_SSL_PROTOCOL = "TLS";
-
-    public static final boolean DEFAULT_EXCHANGE_DURABLE = true;
-    public static final boolean DEFAULT_EXCHANGE_AUTO_DELETE = true;
-    public static final boolean DEFAULT_EXCHANGE_REDECLARE = false;
-
-    public static final boolean DEFAULT_QUEUE_DURABLE = true;
-    public static final boolean DEFAULT_QUEUE_AUTO_DELETE = false;
-    public static final boolean DEFAULT_QUEUE_REDECLARE = false;
-    public static final boolean DEFAULT_QUEUE_EXCLUSIVE = false;
-
-    public static final int DEFAULT_PORT = 5672;
-    public static final String DEFAULT_PORT_STRING = Integer.toString(DEFAULT_PORT);
-
-    public static final int DEFAULT_TIMEOUT = 1000;
-    public static final String DEFAULT_TIMEOUT_STRING = Integer.toString(DEFAULT_TIMEOUT);
-
-    public static final int DEFAULT_ITERATIONS = 1;
-    public static final String DEFAULT_ITERATIONS_STRING = Integer.toString(DEFAULT_ITERATIONS);
-
-    public static final int DEFAULT_MIN_PRIORITY = 0;
-    public static final int DEFAULT_MAX_PRIORITY = 255;
-
-    // The value is in seconds, and default value suggested by RabbitMQ is 60.
-    public static final int DEFAULT_HEARTBEAT = 60;
-    public static final String DEFAULT_HEARTBEAT_STRING = Integer.toString(DEFAULT_HEARTBEAT);
-
     //++ These are JMX names, and must not be changed
     protected static final String EXCHANGE              = "AMQPSampler.Exchange";
     protected static final String EXCHANGE_TYPE         = "AMQPSampler.ExchangeType";
@@ -87,6 +53,57 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     private static final String QUEUE_REDECLARE         = "AMQPSampler.Redeclare";
     private static final String QUEUE_EXCLUSIVE         = "AMQPSampler.QueueExclusive";
     private static final String QUEUE_AUTO_DELETE       = "AMQPSampler.QueueAutoDelete";
+
+    public static final String[] EXCHANGE_TYPES = new String[] {
+        "direct",
+        "topic",
+        "headers",
+        "fanout"
+    };
+
+    public static final int DEFAULT_EXCHANGE_TYPE = Arrays.asList(EXCHANGE_TYPES).indexOf("direct");
+
+    public static final String DEFAULT_EXCHANGE_NAME = "jmeterExchange";
+
+    public static final boolean DEFAULT_EXCHANGE_DURABLE = true;
+    public static final boolean DEFAULT_EXCHANGE_AUTO_DELETE = false;
+    public static final boolean DEFAULT_EXCHANGE_REDECLARE = false;
+
+    public static final String DEFAULT_QUEUE_NAME = "jmeterQueue";
+    public static final String DEFAULT_ROUTING_KEY = "jmeterRoutingKey";
+
+    public static final boolean DEFAULT_QUEUE_DURABLE = true;
+    public static final boolean DEFAULT_QUEUE_AUTO_DELETE = false;
+    public static final boolean DEFAULT_QUEUE_REDECLARE = false;
+    public static final boolean DEFAULT_QUEUE_EXCLUSIVE = false;
+
+    public static final String DEFAULT_MSG_TTL = "";
+    public static final String DEFAULT_MSG_EXPIRES = "";
+    public static final String DEFAULT_MSG_PRIORITY = "";
+
+    public static final String DEFAULT_VIRTUAL_HOST = "/";
+    public static final String DEFAULT_HOSTNAME = "localhost";
+    public static final String DEFAULT_USERNAME = "guest";
+    public static final String DEFAULT_PASSWORD = "guest";
+
+    public static final boolean DEFAULT_SSL_STATE = false;
+    public static final String DEFAULT_SSL_PROTOCOL = "TLS";
+
+    public static final int DEFAULT_PORT = 5672;
+    public static final String DEFAULT_PORT_STRING = Integer.toString(DEFAULT_PORT);
+
+    public static final int DEFAULT_TIMEOUT = 1000;
+    public static final String DEFAULT_TIMEOUT_STRING = Integer.toString(DEFAULT_TIMEOUT);
+
+    public static final int DEFAULT_ITERATIONS = 1;
+    public static final String DEFAULT_ITERATIONS_STRING = Integer.toString(DEFAULT_ITERATIONS);
+
+    public static final int DEFAULT_MIN_PRIORITY = 0;
+    public static final int DEFAULT_MAX_PRIORITY = 255;
+
+    // The value is in seconds, and default value suggested by RabbitMQ is 60.
+    public static final int DEFAULT_HEARTBEAT = 60;
+    public static final String DEFAULT_HEARTBEAT_STRING = Integer.toString(DEFAULT_HEARTBEAT);
 
     private final transient ConnectionFactory factory;
     private transient Connection connection;
@@ -123,10 +140,10 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
                     }
                 }
 
-                log.info("bound to:"
+                log.debug("Bound to:"
                     + "\n\t queue: " + getQueue()
                     + "\n\t exchange: " + getExchange()
-                    + "\n\t exchange(D)? " + getExchangeDurable()
+                    + "\n\t durable: " + getExchangeDurable()
                     + "\n\t routing key: " + getRoutingKey()
                     + "\n\t arguments: " + getQueueArguments()
                 );
@@ -349,16 +366,16 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
         return getPropertyAsInt(PORT);
     }
 
+    public boolean getConnectionSSL() {
+        return getPropertyAsBoolean(SSL);
+    }
+
     public void setConnectionSSL(String content) {
         setProperty(SSL, content);
     }
 
     public void setConnectionSSL(Boolean value) {
         setProperty(SSL, value.toString());
-    }
-
-    public boolean connectionSSL() {
-        return getPropertyAsBoolean(SSL);
     }
 
     public String getUsername() {
@@ -452,6 +469,9 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
         return getPropertyAsBoolean(QUEUE_AUTO_DELETE);
     }
 
+    /**
+     * @return the whether the queue should be redeclared
+     */
     public Boolean getQueueRedeclare() {
         return getPropertyAsBoolean(QUEUE_REDECLARE);
     }
@@ -496,7 +516,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
                 factory.setPassword(getPassword());
                 factory.setRequestedHeartbeat(getHeartbeatAsInt());
 
-                if (connectionSSL()) {
+                if (getConnectionSSL()) {
                     factory.useSslProtocol(DEFAULT_SSL_PROTOCOL);
                 }
 
@@ -564,7 +584,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
             log.info("Deleting exchange {}", getExchange());
             channel.exchangeDelete(getExchange());
         } catch (Exception ex) {
-            log.debug(ex.toString(), ex);
+            log.warn(ex.toString(), ex);
             // ignore it
         } finally {
             if (channel.isOpen()) {

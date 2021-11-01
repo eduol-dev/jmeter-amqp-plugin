@@ -49,13 +49,11 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
     private static final String MESSAGE_ID          = "AMQPPublisher.MessageId";
     private static final String MESSAGE_PRIORITY    = "AMQPPublisher.MessagePriority";
     private static final String HEADERS             = "AMQPPublisher.Headers";
-
-    public static boolean DEFAULT_PERSISTENT        = false;
     private static final String PERSISTENT          = "AMQPPublisher.Persistent";
-
-    public static boolean DEFAULT_USE_TX            = false;
     private static final String USE_TX              = "AMQPPublisher.UseTx";
 
+    public static boolean DEFAULT_PERSISTENT         = false;
+    public static boolean DEFAULT_USE_TX             = false;
     public static final int DEFAULT_MESSAGE_PRIORITY = 0;
     public static final String DEFAULT_RESPONSE_CODE = "500";
     public static final String DEFAULT_CONTENT_TYPE  = "text/plain";
@@ -131,7 +129,7 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
             result.setResponseMessage("OK");
             result.setSuccessful(true);
         } catch (Exception ex) {
-            log.debug(ex.getMessage(), ex);
+            log.warn(ex.getMessage(), ex);
             result.setResponseCode("000");
             result.setResponseMessage(ex.toString());
         } finally {

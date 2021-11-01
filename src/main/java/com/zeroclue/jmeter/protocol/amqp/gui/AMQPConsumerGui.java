@@ -19,8 +19,8 @@ public class AMQPConsumerGui extends AMQPSamplerGui {
     private final JLabeledTextField receiveTimeout = new JLabeledTextField("Receive Timeout");
     private final JLabeledTextField prefetchCount = new JLabeledTextField("   Prefetch Count");
 
-    private final JCheckBox purgeQueue = new JCheckBox("Purge Queue", false);
-    private final JCheckBox autoAck = new JCheckBox("Auto ACK", true);
+    private final JCheckBox purgeQueue = new JCheckBox("Purge Queue", AMQPConsumer.DEFAULT_PURGE_QUEUE);
+    private final JCheckBox autoAck = new JCheckBox("Auto ACK", AMQPConsumer.DEFAULT_AUTO_ACK);
     private final JCheckBox readResponse = new JCheckBox("Read Response", AMQPConsumer.DEFAULT_READ_RESPONSE);
     private final JCheckBox useTx = new JCheckBox("Use Transactions", AMQPConsumer.DEFAULT_USE_TX);
 
@@ -95,9 +95,9 @@ public class AMQPConsumerGui extends AMQPSamplerGui {
         readResponse.setSelected(AMQPConsumer.DEFAULT_READ_RESPONSE);
         prefetchCount.setText(AMQPConsumer.DEFAULT_PREFETCH_COUNT_STRING);
         useTx.setSelected(AMQPConsumer.DEFAULT_USE_TX);
-        receiveTimeout.setText("");
-        purgeQueue.setSelected(false);
-        autoAck.setSelected(true);
+        receiveTimeout.setText(AMQPConsumer.DEFAULT_RECEIVE_TIMEOUT);
+        purgeQueue.setSelected(AMQPConsumer.DEFAULT_PURGE_QUEUE);
+        autoAck.setSelected(AMQPConsumer.DEFAULT_AUTO_ACK);
     }
 
     /**
