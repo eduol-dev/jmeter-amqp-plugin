@@ -23,7 +23,9 @@ This plugin includes 2 samplers:
 - **AMQP Publisher**
 - **AMQP Consumer**
 
-![amqp-plugin-samplers](assets/images/amqp-plugin-samplers.png)
+![amqp-plugin-samplers](docs/images/amqp-plugin-samplers.png)
+
+A pre-configured example scenario can be found in the [examples](docs/examples) directory.
 
 ## Build
 
@@ -35,7 +37,7 @@ In order to build JMeter AMQP plugin from source, you will need:
 - [Apache Maven 3](https://maven.apache.org/)
 
 Build dependencies are managed by Maven.\
-JARs should automatically be downloaded by Maven as part of the build process.
+Jars should automatically be downloaded by Maven as part of the build process.
 
 In addition, you'll need to copy or symlink the following from `$JMETER_HOME/lib/ext` directory:
 
@@ -52,8 +54,8 @@ mvn clean package
 This will create 2 jars in `/target` directory, the original jar and the jar with all the dependencies within (this is the one you need):
 
 ```
-jmeter-amqp-plugin-VERSION.jar
-jmeter-amqp-plugin-VERSION-jar-with-dependencies.jar
+target/jmeter-amqp-plugin-VERSION.jar
+target/jmeter-amqp-plugin-VERSION-jar-with-dependencies.jar
 ```
 
 To install, execute:
