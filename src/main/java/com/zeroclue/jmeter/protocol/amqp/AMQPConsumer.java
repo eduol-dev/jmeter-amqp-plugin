@@ -1,23 +1,22 @@
 package com.zeroclue.jmeter.protocol.amqp;
 
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.ConsumerCancelledException;
+import com.rabbitmq.client.QueueingConsumer;
+import com.rabbitmq.client.ShutdownSignalException;
+
 import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.TimeoutException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.jmeter.samplers.Entry;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Interruptible;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestStateListener;
-
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.QueueingConsumer;
-import com.rabbitmq.client.ConsumerCancelledException;
-import com.rabbitmq.client.ShutdownSignalException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStateListener {
 
@@ -64,6 +63,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         result.setSampleLabel(getName());
         result.setSuccessful(false);
         result.setResponseCode(DEFAULT_RESPONSE_CODE);
+        result.setSampleLabel(getTitle());
 
         trace("AMQPConsumer.sample()");
 
@@ -84,7 +84,6 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
             return result;
         }
 
-        result.setSampleLabel(getTitle());
         /*
          * Perform the sampling
          */
@@ -151,7 +150,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         } catch (InterruptedException e) {
             consumer = null;
             consumerTag = null;
-            log.warn("Interupted while attempting to consume");
+            log.warn("Interrupted while attempting to consume");
             result.setResponseCode("200");
             result.setResponseMessage(e.getMessage());
         } catch (IOException e) {
@@ -254,7 +253,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
     }
 
     /**
-     * return whether the sampler should read the response
+     * Option if the sampler should read the response.
      *
      * @return whether the sampler should read the response
      */
@@ -263,7 +262,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
     }
 
     /**
-     * set whether the sampler should read the response or not
+     * Set option if the sampler should read the response.
      *
      * @param read whether the sampler should read the response or not
      */
@@ -272,7 +271,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
     }
 
     /**
-     * return whether the sampler should read the response as a boolean value
+     * Option if the sampler should read the response as a boolean value.
      *
      * @return whether the sampler should read the response as a boolean value
      */
@@ -340,6 +339,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         log.debug("{} {} {} {}", tn, tl, s, th);
     }
 
+    @Override
     protected boolean initChannel() throws IOException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
         boolean ret = super.initChannel();
         channel.basicQos(getPrefetchCountAsInt());

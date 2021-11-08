@@ -1,5 +1,7 @@
 package com.zeroclue.jmeter.protocol.amqp.gui;
 
+import com.zeroclue.jmeter.protocol.amqp.AMQPConsumer;
+
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
@@ -7,10 +9,8 @@ import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.JLabeledTextField;
 
-import com.zeroclue.jmeter.protocol.amqp.AMQPConsumer;
-
 /**
- * This is the GUI for AMQP Consumer.
+ * GUI for AMQP Consumer.
  */
 public class AMQPConsumerGui extends AMQPSamplerGui {
 
@@ -46,6 +46,7 @@ public class AMQPConsumerGui extends AMQPSamplerGui {
     /*
      * Helper method to set up the GUI screen
      */
+    @Override
     protected void init() {
         super.init();
 

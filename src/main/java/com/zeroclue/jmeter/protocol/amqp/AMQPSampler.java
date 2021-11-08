@@ -1,22 +1,5 @@
 package com.zeroclue.jmeter.protocol.amqp;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeoutException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-
-import org.apache.commons.lang3.StringUtils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.jmeter.samplers.AbstractSampler;
-import org.apache.jmeter.testelement.ThreadListener;
-
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Address;
 import com.rabbitmq.client.AlreadyClosedException;
@@ -24,6 +7,21 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.ShutdownSignalException;
+
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeoutException;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.samplers.AbstractSampler;
+import org.apache.jmeter.testelement.ThreadListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AMQPSampler extends AbstractSampler implements ThreadListener {
 
@@ -109,8 +107,8 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     private transient Connection connection;
 
     protected AMQPSampler() {
-        factory = new ConnectionFactory();
-        factory.setRequestedHeartbeat(DEFAULT_HEARTBEAT);
+        this.factory = new ConnectionFactory();
+        this.factory.setRequestedHeartbeat(DEFAULT_HEARTBEAT);
     }
 
     protected boolean initChannel() throws IOException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
@@ -223,7 +221,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     }
 
     public int getIterationsAsInt() {
-        return getPropertyAsInt(ITERATIONS);
+        return getPropertyAsInt(ITERATIONS, DEFAULT_ITERATIONS);
     }
 
     public String getExchange() {
@@ -258,11 +256,11 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
         setProperty(EXCHANGE_TYPE, name);
     }
 
-    public Boolean getExchangeRedeclare() {
+    public boolean getExchangeRedeclare() {
         return getPropertyAsBoolean(EXCHANGE_REDECLARE);
     }
 
-    public void setExchangeRedeclare(Boolean content) {
+    public void setExchangeRedeclare(boolean content) {
         setProperty(EXCHANGE_REDECLARE, content);
     }
 
@@ -472,7 +470,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     /**
      * @return the whether the queue should be redeclared
      */
-    public Boolean getQueueRedeclare() {
+    public boolean getQueueRedeclare() {
         return getPropertyAsBoolean(QUEUE_REDECLARE);
     }
 

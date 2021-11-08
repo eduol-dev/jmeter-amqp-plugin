@@ -1,5 +1,7 @@
 package com.zeroclue.jmeter.protocol.amqp.gui;
 
+import com.zeroclue.jmeter.protocol.amqp.AMQPSampler;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -9,16 +11,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jorphan.gui.JLabeledChoice;
 import org.apache.jorphan.gui.JLabeledTextField;
-
-import com.zeroclue.jmeter.protocol.amqp.AMQPSampler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AMQPSamplerGui extends AbstractSamplerGui {
 

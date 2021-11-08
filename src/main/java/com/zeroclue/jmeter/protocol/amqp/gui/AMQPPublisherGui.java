@@ -1,5 +1,7 @@
 package com.zeroclue.jmeter.protocol.amqp.gui;
 
+import com.zeroclue.jmeter.protocol.amqp.AMQPPublisher;
+
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,10 +16,8 @@ import org.apache.jmeter.testelement.TestElement;
 import org.apache.jorphan.gui.JLabeledTextArea;
 import org.apache.jorphan.gui.JLabeledTextField;
 
-import com.zeroclue.jmeter.protocol.amqp.AMQPPublisher;
-
 /**
- * This is the GUI for AMQP Publisher.
+ * GUI for AMQP Publisher.
  */
 public class AMQPPublisherGui extends AMQPSamplerGui {
 

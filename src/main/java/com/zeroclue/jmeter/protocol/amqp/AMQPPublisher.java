@@ -1,26 +1,24 @@
 package com.zeroclue.jmeter.protocol.amqp;
 
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.lang3.StringUtils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.Entry;
-import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.samplers.Interruptible;
+import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.property.TestElementProperty;
-
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JMeter creates an instance of a sampler class for every occurrence of the
@@ -310,6 +308,7 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
         return builder.build();
     }
 
+    @Override
     protected boolean initChannel() throws IOException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
         boolean ret = super.initChannel();
 
