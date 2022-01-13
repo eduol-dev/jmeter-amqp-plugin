@@ -2,19 +2,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.github.jlavallee</groupId>
+  <groupId>io.github.aliesbelik</groupId>
   <artifactId>jmeter-amqp-plugin</artifactId>
   <version>${revision}</version>
   <packaging>jar</packaging>
   <name>jmeter-amqp-plugin</name>
-  <description>JMeter plugin to publish and consume messages from RabbitMQ or any AMQP message broker</description>
+  <description>JMeter AMQP plugin</description>
   <url>https://github.com/aliesbelik/jmeter-amqp-plugin</url>
+
+  <scm>
+    <connection>scm:git:git@github.com:aliesbelik/jmeter-amqp-plugin.git</connection>
+    <url>scm:git:git@github.com:aliesbelik/jmeter-amqp-plugin.git</url>
+    <developerConnection>scm:git:git@github.com:aliesbelik/jmeter-amqp-plugin.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jmeter.version>5.4.1</jmeter.version>
-    <amqp.client.version>4.12.0</amqp.client.version>
     <java.version>1.8</java.version>
+    <jmeter.version>5.4.3</jmeter.version>
+    <amqp.client.version>4.12.0</amqp.client.version>
     <revision>0.1.0</revision>
   </properties>
 
@@ -32,22 +39,20 @@
     </dependency>
     <dependency>
       <groupId>org.apache.jmeter</groupId>
-      <artifactId>ApacheJMeter_java</artifactId>
-      <version>${jmeter.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!--
-    <dependency>
-      <groupId>org.apache.jmeter</groupId>
       <artifactId>jorphan</artifactId>
       <version>${jmeter.version}</version>
       <scope>provided</scope>
     </dependency>
-    -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.11</version>
+      <version>3.12.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.32</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -59,7 +64,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
+        <version>3.9.0</version>
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
@@ -87,11 +92,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <scm>
-    <connection>scm:git:git@github.com:aliesbelik/jmeter-amqp-plugin.git</connection>
-    <url>scm:git:git@github.com:aliesbelik/jmeter-amqp-plugin.git</url>
-    <developerConnection>scm:git:git@github.com:aliesbelik/jmeter-amqp-plugin.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
 </project>
