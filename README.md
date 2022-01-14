@@ -83,11 +83,16 @@ cp target/jmeter-amqp-plugin-VERSION-jar-with-dependencies.jar $JMETER_HOME/lib/
 
 Thanks to
 
- - @jlavallee (Jeff Lavallee), who created original project;
- - @polarnik (Viacheslav Smirnov), who spent time and efforts to create
+ - [jlavallee](https://github.com/jlavallee) (Jeff Lavallee), who created [original plugin](https://github.com/jlavallee/JMeter-Rabbit-AMQP);
+ - [polarnik](https://github.com/polarnik) (Viacheslav Smirnov), who spent time and efforts to create
 [comparison](https://github.com/polarnik/JMeter-Rabbit-AMQP-info) of the forks with valuable changes;
- - @gybandi (Gyuro Andras), @zeph1rus, @gregLibert (Gregory Libert), @wojtek-oledzki (Wojtek Oledzki), @looseend (John Singleton),
-@sergiogouveia (Sergio Gouveia) for the features & enhancements implemented in their forks;
+ - for the features & enhancements implemented in their forks:
+   - [gregLibert](https://github.com/gregLibert/JMeter-Rabbit-AMQP) (Gregory Libert),
+   - [gybandi](https://github.com/gybandi/JMeter-Rabbit-AMQP) (Gyuro Andras),
+   - [looseend](https://github.com/looseend/JMeter-Rabbit-AMQP) (John Singleton),
+   - [sergiogouveia](https://github.com/sergiogouveia/JMeter-Rabbit-AMQP) (Sergio Gouveia),
+   - [wojtek-oledzki](https://github.com/voytek-solutions/JMeter-Rabbit-AMQP) (Wojtek Oledzki),
+   - [zeph1rus](https://github.com/zeph1rus/JMeter-Rabbit-AMQP);
  - all the [contributors](https://github.com/jlavallee/JMeter-Rabbit-AMQP/graphs/contributors) to original project.
 
 ## Contributing
