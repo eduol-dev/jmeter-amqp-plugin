@@ -1,16 +1,40 @@
+# General
+*\.sw[po]
+*.tmp
+*.bak
+.DS_Store
+
+# Log
+*.log
+
+# Eclipse
 .classpath
+.metadata
 .project
 .settings/
-*\.sw[po]
-.DS_Store
-stats/
-target/
-*.log
-lib/
-/nbproject/private/
-/build/
-/dist/
-/ivy/
-/out/
-*.iml
+
+# Intellij
 .idea
+*.iml
+*.ipr
+*.iws
+
+# NetBeans
+build/
+nbbuild/
+dist/
+nbdist/
+
+# Maven
+target/
+dependency-reduced-pom.xml
+
+# Package
+*.jar
+*.zip
+*.tar.gz
+
+lib/
+ivy/
+out/
+stats/
