@@ -1,4 +1,4 @@
-name: Test and Build JMeter AMQP Plugin
+name: Test and Build
 
 on:
   push:
@@ -11,20 +11,21 @@ on:
 
 jobs:
   compile:
-    runs-on: ubuntu-latest
     strategy:
-        matrix:
-            java: [ 8, 11, 17 ]
+      matrix:
+        os: [ ubuntu-latest ]
+        java: [ 8, 11, 17 ]
+        distro: [ 'zulu', 'temurin' ]
+    runs-on: ${{ matrix.os }}
     name: Java ${{ matrix.java }} compile
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Setup JDK ${{ matrix.java }}
+    - name: Setup JDK ${{ matrix.java }} (${{ matrix.distro }})
       uses: actions/setup-java@v2
       with:
-          distribution: zulu
-          java-package: jdk
-          java-version: ${{ matrix.java }}
+        distribution: ${{ matrix.distro }}
+        java-version: ${{ matrix.java }}
     - name: Compile
       run: mvn -B compile
 
