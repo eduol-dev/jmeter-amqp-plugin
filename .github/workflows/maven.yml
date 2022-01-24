@@ -17,11 +17,11 @@ jobs:
         java: [ 8, 11, 17 ]
         distro: [ 'zulu', 'temurin' ]
     runs-on: ${{ matrix.os }}
-    name: Java ${{ matrix.java }} compile
+    name: Java ${{ matrix.java }} (${{ matrix.distro }} @ ${{ matrix.os }}) compile
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Setup JDK ${{ matrix.java }} (${{ matrix.distro }})
+    - name: Setup JDK ${{ matrix.java }} (${{ matrix.distro }} @ ${{ matrix.os }})
       uses: actions/setup-java@v2
       with:
         distribution: ${{ matrix.distro }}
@@ -36,7 +36,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Setup JDK 1.8
+    - name: Setup JDK 8
       uses: actions/setup-java@v2
       with:
         distribution: zulu
@@ -45,7 +45,7 @@ jobs:
     - name: Cache Maven packages
       uses: actions/cache@v2
       with:
-        path: ~/.m2/repository
+        path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
     - name: Maven version

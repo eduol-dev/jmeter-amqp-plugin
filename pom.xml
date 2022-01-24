@@ -12,21 +12,36 @@
   <url>https://github.com/aliesbelik/jmeter-amqp-plugin</url>
 
   <scm>
-    <connection>scm:git:git@github.com:aliesbelik/jmeter-amqp-plugin.git</connection>
-    <url>scm:git:git@github.com:aliesbelik/jmeter-amqp-plugin.git</url>
+    <connection>scm:git:https://github.com/aliesbelik/jmeter-amqp-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:aliesbelik/jmeter-amqp-plugin.git</developerConnection>
+    <url>https://github.com/aliesbelik/jmeter-amqp-plugin</url>
     <tag>HEAD</tag>
   </scm>
+
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/aliesbelik/jmeter-amqp-plugin/issues</url>
+  </issueManagement>
 
   <properties>
     <revision>0.1.1-SNAPSHOT</revision>
     <java.version>1.8</java.version>
-    <jmeter.version>5.4.3</jmeter.version>
-    <amqp.client.version>4.12.0</amqp.client.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
     <sonar.projectKey>aliesbelik_jmeter-amqp-plugin</sonar.projectKey>
     <sonar.organization>aliesbelik</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
+    <!-- dependency versions -->
+    <jmeter.version>5.4.3</jmeter.version>
+    <amqp.client.version>4.12.0</amqp.client.version>
+    <commons-lang3.version>3.12.0</commons-lang3.version>
+    <slf4j.version>1.7.33</slf4j.version>
+
+    <!-- plugin versions -->
+    <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
+    <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
   </properties>
 
   <dependencies>
@@ -50,13 +65,13 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.12.0</version>
+      <version>${commons-lang3.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.33</version>
+      <version>${slf4j.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -67,10 +82,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.9.0</version>
+        <version>${maven-compiler-plugin.version}</version>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
           <optimize>true</optimize>
           <showDeprecation>false</showDeprecation>
           <showWarnings>true</showWarnings>
@@ -79,7 +94,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.4</version>
+        <version>${maven-shade-plugin.version}</version>
         <executions>
           <execution>
             <id>create-fat-jar</id>
