@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    ignore:
+      # ignore RabbitMQ Java Client 5.x until refactoring
+      - dependency-name: com.rabbitmq:amqp-client
+        versions:
+          - ">= 5.0"
