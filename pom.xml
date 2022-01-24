@@ -24,6 +24,9 @@
     <jmeter.version>5.4.3</jmeter.version>
     <amqp.client.version>4.12.0</amqp.client.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <sonar.projectKey>aliesbelik_jmeter-amqp-plugin</sonar.projectKey>
+    <sonar.organization>aliesbelik</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>
 
   <dependencies>
