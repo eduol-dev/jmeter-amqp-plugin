@@ -11,24 +11,15 @@
   <description>JMeter AMQP plugin</description>
   <url>https://github.com/aliesbelik/jmeter-amqp-plugin</url>
 
-  <scm>
-    <connection>scm:git:https://github.com/aliesbelik/jmeter-amqp-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:aliesbelik/jmeter-amqp-plugin.git</developerConnection>
-    <url>https://github.com/aliesbelik/jmeter-amqp-plugin</url>
-    <tag>HEAD</tag>
-  </scm>
-
-  <issueManagement>
-    <system>GitHub Issues</system>
-    <url>https://github.com/aliesbelik/jmeter-amqp-plugin/issues</url>
-  </issueManagement>
-
   <properties>
     <revision>0.1.1-SNAPSHOT</revision>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
+
+    <!-- SonarCloud integration -->
     <sonar.projectKey>aliesbelik_jmeter-amqp-plugin</sonar.projectKey>
     <sonar.organization>aliesbelik</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -132,4 +123,45 @@
       </plugin>
     </plugins>
   </build>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>jlavallee</id>
+      <name>Jeff Lavallee</name>
+      <url>https://github.com/jlavallee</url>
+      <roles>
+        <role>author</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>aliesbelik</id>
+      <name>Aliaksandr Belik</name>
+      <url>https://github.com/aliesbelik</url>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/aliesbelik/jmeter-amqp-plugin</url>
+    <connection>scm:git:https://github.com/aliesbelik/jmeter-amqp-plugin.git</connection>
+    <developerConnection>scm:git:https://github.com/aliesbelik/jmeter-amqp-plugin.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/aliesbelik/jmeter-amqp-plugin/issues</url>
+  </issueManagement>
+
+  <ciManagement>
+    <system>GitHub</system>
+    <url>https://github.com/aliesbelik/jmeter-amqp-plugin/actions</url>
+  </ciManagement>
 </project>
