@@ -8,6 +8,9 @@ on:
       - 'docs/**'
   pull_request:
     types: [opened, synchronize, reopened]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
 
 jobs:
   sonarcloud:

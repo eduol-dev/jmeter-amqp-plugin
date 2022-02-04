@@ -1,4 +1,4 @@
-name: Test and Build
+name: CI
 
 on:
   push:
@@ -8,6 +8,10 @@ on:
       - 'docs/**'
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+  workflow_dispatch: # on-demand/manual triggering
 
 jobs:
   compile:
