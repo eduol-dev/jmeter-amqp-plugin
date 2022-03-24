@@ -9,7 +9,7 @@ or any [AMQP](http://www.amqp.org/) message broker.
 ## Requirements
 
 - Requires JDK 8+.
-- Compatible with versions up to **4.12.0** of [com.rabbitmq:amqp-client](https://github.com/rabbitmq/rabbitmq-java-client).
+- Compatible with versions up to **5.14.2** of [com.rabbitmq:amqp-client](https://github.com/rabbitmq/rabbitmq-java-client).
 
 ## Installation
 

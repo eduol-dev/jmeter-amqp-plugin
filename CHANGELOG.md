@@ -49,7 +49,7 @@ Initial release.
 ### Dependency Updates
 
 * Up jmeter-core version to 5.4.3.
-* Up amqp-client version to 4.12.0.
+* Up amqp-client version to 5.14.2.
 * Up commons-lang3 version to 3.12.0.
 
 [unreleased]: https://github.com/aliesbelik/jmeter-amqp-plugin/compare/v0.1.0...HEAD

@@ -2,15 +2,10 @@ package com.zeroclue.jmeter.protocol.amqp;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConsumerCancelledException;
-import com.rabbitmq.client.QueueingConsumer;
+import com.rabbitmq.client.DeliverCallback;
+import com.rabbitmq.client.Delivery;
 import com.rabbitmq.client.ShutdownSignalException;
-
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Map;
-import java.util.concurrent.TimeoutException;
-
+import org.apache.groovy.util.Maps;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
@@ -18,11 +13,27 @@ import org.apache.jmeter.testelement.TestStateListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStateListener {
 
     private static final long serialVersionUID = 7480863561320459091L;
 
     private static final Logger log = LoggerFactory.getLogger(AMQPConsumer.class);
+
+    private static final Map<Class<? extends Exception>, String> EXCEPTION_TO_RESPONSE_CODE = Maps.of(
+        IOException.class, "100",
+        InterruptedException.class, "200",
+        ConsumerCancelledException.class, "300",
+        ShutdownSignalException.class, "400"
+    );
 
     //++ These are JMX names, and must not be changed
     private static final String PREFETCH_COUNT          = "AMQPConsumer.PrefetchCount";
@@ -47,7 +58,8 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
     public static final String DEFAULT_RECEIVE_TIMEOUT = "";
 
     private transient Channel channel;
-    private transient QueueingConsumer consumer;
+    private transient DeliverCallback consumer;
+    private transient BlockingQueue<Delivery> response;
     private transient String consumerTag;
 
     public AMQPConsumer() {
@@ -72,11 +84,12 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
             // only do this once per thread, otherwise it slows down the consumption by appx 50%
             if (consumer == null) {
                 log.info("Creating consumer");
-                consumer = new QueueingConsumer(channel);
+                response = new LinkedBlockingQueue<>(1);
+                consumer = (consumerTag, delivery) -> response.offer(delivery);
             }
             if (consumerTag == null) {
                 log.info("Starting basic consumer");
-                consumerTag = channel.basicConsume(getQueue(), autoAck(), consumer);
+                consumerTag = channel.basicConsume(getQueue(), autoAck(), consumer, consumerTag  -> {});
             }
         } catch (Exception ex) {
             log.error("Failed to initialize channel", ex);
@@ -91,11 +104,11 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         // aggregate samples
         int loop = getIterationsAsInt();
         result.sampleStart();                      // start timing
-        QueueingConsumer.Delivery delivery = null;
+        Delivery delivery = null;
 
         try {
             for (int idx = 0; idx < loop; idx++) {
-                delivery = consumer.nextDelivery(getReceiveTimeoutAsInt());
+                delivery = response.poll(getReceiveTimeoutAsInt(), TimeUnit.MILLISECONDS);
 
                 if (delivery == null) {
                     result.setResponseMessage("Timed out");
@@ -133,32 +146,14 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
 
             result.setResponseCodeOK();
             result.setSuccessful(true);
-        } catch (ShutdownSignalException e) {
+        } catch (ShutdownSignalException | ConsumerCancelledException | InterruptedException | IOException e) {
+            response = null;
             consumer = null;
             consumerTag = null;
             log.warn("AMQP consumer failed to consume", e);
-            result.setResponseCode("400");
+            result.setResponseCode(EXCEPTION_TO_RESPONSE_CODE.get(e.getClass()));
             result.setResponseMessage(e.getMessage());
             interrupt();
-        } catch (ConsumerCancelledException e) {
-            consumer = null;
-            consumerTag = null;
-            log.warn("AMQP consumer failed to consume", e);
-            result.setResponseCode("300");
-            result.setResponseMessage(e.getMessage());
-            interrupt();
-        } catch (InterruptedException e) {
-            consumer = null;
-            consumerTag = null;
-            log.warn("Interrupted while attempting to consume");
-            result.setResponseCode("200");
-            result.setResponseMessage(e.getMessage());
-        } catch (IOException e) {
-            consumer = null;
-            consumerTag = null;
-            log.warn("AMQP consumer failed to consume", e);
-            result.setResponseCode("100");
-            result.setResponseMessage(e.getMessage());
         } finally {
             result.sampleEnd();         // end timing
         }
@@ -351,7 +346,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         return ret;
     }
 
-    private String formatHeaders(QueueingConsumer.Delivery delivery) {
+    private String formatHeaders(Delivery delivery) {
         Map<String, Object> headers = delivery.getProperties().getHeaders();
         StringBuilder sb = new StringBuilder();
 
