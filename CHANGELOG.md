@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+### Dependency Updates
+
+* Up amqp-client version to 5.14.2.
+
 ## [0.1.0] - 2022-01-15
 
 Initial release.
@@ -49,7 +53,7 @@ Initial release.
 ### Dependency Updates
 
 * Up jmeter-core version to 5.4.3.
-* Up amqp-client version to 5.14.2.
+* Up amqp-client version to 4.12.0.
 * Up commons-lang3 version to 3.12.0.
 
 [unreleased]: https://github.com/aliesbelik/jmeter-amqp-plugin/compare/v0.1.0...HEAD

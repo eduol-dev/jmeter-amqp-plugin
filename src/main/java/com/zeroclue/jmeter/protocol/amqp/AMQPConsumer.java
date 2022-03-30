@@ -5,6 +5,7 @@ import com.rabbitmq.client.ConsumerCancelledException;
 import com.rabbitmq.client.DeliverCallback;
 import com.rabbitmq.client.Delivery;
 import com.rabbitmq.client.ShutdownSignalException;
+
 import org.apache.groovy.util.Maps;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.Interruptible;
@@ -81,15 +82,15 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
 
         try {
             initChannel();
+            response = new LinkedBlockingQueue<>(1);
             // only do this once per thread, otherwise it slows down the consumption by appx 50%
             if (consumer == null) {
                 log.info("Creating consumer");
-                response = new LinkedBlockingQueue<>(1);
                 consumer = (consumerTag, delivery) -> response.offer(delivery);
             }
             if (consumerTag == null) {
                 log.info("Starting basic consumer");
-                consumerTag = channel.basicConsume(getQueue(), autoAck(), consumer, consumerTag  -> {});
+                consumerTag = channel.basicConsume(getQueue(), autoAck(), consumer, consumerTag  -> { });
             }
         } catch (Exception ex) {
             log.error("Failed to initialize channel", ex);
