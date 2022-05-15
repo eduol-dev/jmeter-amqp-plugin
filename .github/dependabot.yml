@@ -1,11 +1,14 @@
 version: 2
 updates:
+
+  # Maintain dependencies for Maven
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
       interval: "weekly"
-    ignore:
-      # ignore RabbitMQ Java Client 5.x until refactoring
-      - dependency-name: com.rabbitmq:amqp-client
-        versions:
-          - ">= 5.0"
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
