@@ -82,6 +82,11 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
 
         try {
             initChannel();
+
+            if (purgeQueue()) {
+                doPurgeQueue();
+            }
+
             // only do this once per thread, otherwise it slows down the consumption by appx 50%
             if (consumer == null) {
                 log.info("Creating consumer");
@@ -140,7 +145,6 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
             /*
              * Set up the sample result details
              */
-
             result.setResponseMessage("OK");
             result.setDataType(SampleResult.TEXT);
             result.setResponseHeaders(delivery != null ? formatHeaders(delivery) : null);
@@ -191,6 +195,15 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
 
     public boolean purgeQueue() {
         return Boolean.parseBoolean(getPurgeQueue());
+    }
+
+    private void doPurgeQueue() {
+        log.info("Purging queue {}", getQueue());
+        try {
+            channel.queuePurge(getQueue());
+        } catch (IOException e) {
+            log.error("Failed to purge queue " + getQueue(), e);
+        }
     }
 
     /**
@@ -287,15 +300,6 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
     @Override
     public void testEnded() {
 
-        if (purgeQueue()) {
-            log.info("Purging queue {}", getQueue());
-
-            try {
-                channel.queuePurge(getQueue());
-            } catch (IOException e) {
-                log.error("Failed to purge queue " + getQueue(), e);
-            }
-        }
     }
 
     @Override
