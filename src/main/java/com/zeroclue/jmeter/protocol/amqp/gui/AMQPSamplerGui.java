@@ -52,6 +52,10 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
 
     protected final JLabeledTextField iterations = new JLabeledTextField("Number of Samples to Aggregate");
 
+    private static final String EXCHANGE_SETTINGS_LABEL = "Exchange";
+    private static final String QUEUE_SETTINGS_LABEL = "Queue";
+    private static final String CONNECTION_SETTINGS_LABEL = "Connection";
+
     protected abstract void setMainPanel(JPanel panel);
 
     /**
@@ -205,7 +209,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         // Exchange section
 
         JPanel exchangeSettings = new JPanel(new GridBagLayout());
-        exchangeSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), getExchangeSettingsLabel()));
+        exchangeSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), EXCHANGE_SETTINGS_LABEL));
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -230,12 +234,11 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
 
         exchangeType.setPreferredSize(exchange.getPreferredSize());
         exchangeSettings.validate();
-        //exchangeSettings.repaint();
 
         // Queue section
 
         JPanel queueSettings = new JPanel(new GridBagLayout());
-        queueSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), getQueueSettingsLabel()));
+        queueSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), QUEUE_SETTINGS_LABEL));
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         queueSettings.add(queue, gridBagConstraints);
@@ -284,7 +287,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         // Connection section
 
         JPanel serverSettings = new JPanel(new GridBagLayout());
-        serverSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), getConnectionSettingsLabel()));
+        serverSettings.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), CONNECTION_SETTINGS_LABEL));
 
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -324,17 +327,5 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         commonPanel.add(serverSettings, gridBagConstraintsCommon);
 
         return commonPanel;
-    }
-
-    protected String getExchangeSettingsLabel() {
-        return "Exchange";
-    }
-
-    protected String getQueueSettingsLabel() {
-        return "Queue";
-    }
-
-    protected String getConnectionSettingsLabel() {
-        return "Connection";
     }
 }

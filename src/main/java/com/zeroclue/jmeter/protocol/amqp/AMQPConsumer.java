@@ -125,9 +125,9 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
                  * Set up the sample result details
                  */
                 if (getReadResponseAsBoolean()) {
-                    String response = new String(delivery.getBody());
-                    result.setSamplerData(response);
-                    result.setResponseData(response, null);
+                    String responseStr = new String(delivery.getBody());
+                    result.setSamplerData(responseStr);
+                    result.setResponseData(responseStr, null);
                 } else {
                     result.setSamplerData("Read response is false.");
                 }
@@ -179,7 +179,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
     }
 
     /**
-     * @return the whether or not to purge the queue
+     * @return the whether to purge the queue
      */
     public String getPurgeQueue() {
         return getPropertyAsString(PURGE_QUEUE);
@@ -202,12 +202,12 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         try {
             channel.queuePurge(getQueue());
         } catch (IOException e) {
-            log.error("Failed to purge queue " + getQueue(), e);
+            log.error("Failed to purge queue {}", getQueue(), e);
         }
     }
 
     /**
-     * @return the whether or not to auto ack
+     * @return the whether to auto ack
      */
     public String getAutoAck() {
         return getPropertyAsString(AUTO_ACK);
@@ -253,7 +253,7 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         return getPropertyAsInt(PREFETCH_COUNT);
     }
 
-    public Boolean getUseTx() {
+    public boolean getUseTx() {
         return getPropertyAsBoolean(USE_TX, DEFAULT_USE_TX);
     }
 
@@ -299,31 +299,32 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
      */
     @Override
     public void testEnded() {
-
+        // Do nothing
     }
 
     @Override
     public void testEnded(String arg0) {
-
+        // Do nothing
     }
 
     @Override
     public void testStarted() {
-
+        // Do nothing
     }
 
     @Override
     public void testStarted(String arg0) {
-
+        // Do nothing
     }
 
+    @Override
     public void cleanup() {
         try {
             if (consumerTag != null) {
                 channel.basicCancel(consumerTag);
             }
         } catch (IOException e) {
-            log.error("Couldn't safely cancel the sample " + consumerTag, e);
+            log.error("Couldn't safely cancel the sample {}", consumerTag, e);
         }
 
         super.cleanup();
@@ -373,10 +374,10 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
             .append("\n");
 
         if (headers != null) {
-            for (String key : headers.keySet()) {
-                sb.append(key)
+            for (Map.Entry<String,Object> entry : headers.entrySet()) {
+                sb.append(entry.getKey())
                     .append(": ")
-                    .append(headers.get(key))
+                    .append(entry.getValue())
                     .append("\n");
             }
         }

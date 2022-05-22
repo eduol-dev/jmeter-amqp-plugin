@@ -139,12 +139,12 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
                 }
 
                 log.debug("Bound to:"
-                    + "\n\t queue: " + getQueue()
-                    + "\n\t exchange: " + getExchange()
-                    + "\n\t durable: " + getExchangeDurable()
-                    + "\n\t routing key: " + getRoutingKey()
-                    + "\n\t arguments: " + getQueueArguments()
-                );
+                        + "\n\t queue: {}"
+                        + "\n\t exchange: {}"
+                        + "\n\t durable: {}"
+                        + "\n\t routing key: {}"
+                        + "\n\t arguments: {}",
+                        getQueue(), getExchange(), getExchangeDurable(), getRoutingKey(), getQueueArguments());
             }
         } catch (Exception ex) {
             log.debug(ex.toString(), ex);
@@ -168,7 +168,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     }
 
     private Map<String, Object> getQueueArguments() {
-        Map<String, Object> arguments = new HashMap<String, Object>();
+        Map<String, Object> arguments = new HashMap<>();
 
         if (getMessageTTL() != null && !getMessageTTL().isEmpty()) {
             arguments.put("x-message-ttl", getMessageTTLAsInt());
@@ -506,51 +506,50 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     protected Channel createChannel() throws IOException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
          log.info("Creating channel {}:{}", getVirtualHost(), getPortAsInt());
 
-         try {
-             if (connection == null || !connection.isOpen()) {
-                factory.setConnectionTimeout(getTimeoutAsInt());
-                factory.setVirtualHost(getVirtualHost());
-                factory.setUsername(getUsername());
-                factory.setPassword(getPassword());
-                factory.setRequestedHeartbeat(getHeartbeatAsInt());
+         if (connection == null || !connection.isOpen()) {
+            factory.setConnectionTimeout(getTimeoutAsInt());
+            factory.setVirtualHost(getVirtualHost());
+            factory.setUsername(getUsername());
+            factory.setPassword(getPassword());
+            factory.setRequestedHeartbeat(getHeartbeatAsInt());
 
-                if (getConnectionSSL()) {
-                    factory.useSslProtocol(DEFAULT_SSL_PROTOCOL);
-                }
+            if (getConnectionSSL()) {
+                factory.useSslProtocol(DEFAULT_SSL_PROTOCOL);
+            }
 
-                log.debug("RabbitMQ ConnectionFactory using:"
-                      + "\n\t virtual host: " + getVirtualHost()
-                      + "\n\t host: " + getHost()
-                      + "\n\t port: " + getPort()
-                      + "\n\t username: " + getUsername()
-                      + "\n\t password: " + getPassword()
-                      + "\n\t timeout: " + getTimeout()
-                      + "\n\t heartbeat: " + getHeartbeatAsInt()
-                      + "\nin " + this
-                );
+            log.info("RabbitMQ ConnectionFactory using:"
+                    + "\n\t virtual host: {}"
+                    + "\n\t host: {}"
+                    + "\n\t port: {}"
+                    + "\n\t username: {}"
+                    + "\n\t password: {}"
+                    + "\n\t timeout: {}"
+                    + "\n\t heartbeat: {}"
+                    + "\nin {}",
+                    getVirtualHost(), getHost(), getPort(), getUsername(), getPassword(), getTimeout(),
+                    getHeartbeatAsInt(), this);
 
-                String[] hosts = getHost().split(",");
-                Address[] addresses = new Address[hosts.length];
+            String[] hosts = getHost().split(",");
+            Address[] addresses = new Address[hosts.length];
 
-                for (int i = 0; i < hosts.length; i++) {
-                    addresses[i] = new Address(hosts[i], getPortAsInt());
-                }
+            for (int i = 0; i < hosts.length; i++) {
+                addresses[i] = new Address(hosts[i], getPortAsInt());
+            }
 
-                log.info("Using hosts: {} addresses: {}", Arrays.toString(hosts), Arrays.toString(addresses));
-                connection = factory.newConnection(addresses);
-             }
+            if (log.isDebugEnabled()) {
+                log.debug("Using hosts: {} addresses: {}", Arrays.toString(hosts), Arrays.toString(addresses));
+            }
 
-             Channel channel = connection.createChannel();
-
-             if (!channel.isOpen()) {
-                 log.error("Failed to open channel: {}", channel.getCloseReason().getLocalizedMessage());
-             }
-
-             return channel;
-         } catch (Exception ex) {
-             log.debug(ex.toString(), ex);
-             return null;
+            connection = factory.newConnection(addresses);
          }
+
+         Channel channel = connection.createChannel();
+
+         if (!channel.isOpen()) {
+             log.error("Failed to open channel: {}", channel.getCloseReason().getLocalizedMessage());
+         }
+
+         return channel;
     }
 
     protected void deleteQueue() throws IOException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
