@@ -50,9 +50,6 @@ public class AMQPConsumerGui extends AMQPSamplerGui {
     protected void init() {
         super.init();
 
-        //prefetchCount.setPreferredSize(new Dimension(100,25));
-        //useTx.setPreferredSize(new Dimension(100,25));
-
         JPanel optionsPanel = new HorizontalPanel();
         optionsPanel.add(purgeQueue);
         optionsPanel.add(autoAck);
@@ -65,7 +62,6 @@ public class AMQPConsumerGui extends AMQPSamplerGui {
 
         optionsPanel.setPreferredSize(optionsPanel.getPreferredSize());
         optionsPanel.validate();
-        //optionsPanel.repaint();
     }
 
     /**

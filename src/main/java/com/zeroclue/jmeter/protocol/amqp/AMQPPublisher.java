@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
@@ -50,8 +51,8 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
     private static final String PERSISTENT          = "AMQPPublisher.Persistent";
     private static final String USE_TX              = "AMQPPublisher.UseTx";
 
-    public static boolean DEFAULT_PERSISTENT         = false;
-    public static boolean DEFAULT_USE_TX             = false;
+    public static final boolean DEFAULT_PERSISTENT   = false;
+    public static final boolean DEFAULT_USE_TX       = false;
     public static final int DEFAULT_MESSAGE_PRIORITY = 0;
     public static final String DEFAULT_RESPONSE_CODE = "500";
     public static final String DEFAULT_CONTENT_TYPE  = "text/plain";
@@ -103,8 +104,6 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
                 // seen by iostat -cd 1. TPS value remains at 0.
 
                 channel.basicPublish(getExchange(), getMessageRoutingKey(), messageProperties, messageBytes);
-                //System.out.println(" [x] Sent message: '" + data + "'");
-                //System.out.println(" [x] Message properties: '" + messageProperties.toString() + "'");
             }
 
             // commit the sample
@@ -117,7 +116,6 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
              */
 
             result.setSamplerData(data);
-            //result.setResponseData(new String(messageBytes), null);
             result.setResponseData("OK", null);
             result.setDataType(SampleResult.TEXT);
 
@@ -250,7 +248,7 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
         setProperty(new TestElementProperty(HEADERS, headers));
     }
 
-    public Boolean getPersistent() {
+    public boolean getPersistent() {
         return getPropertyAsBoolean(PERSISTENT, DEFAULT_PERSISTENT);
     }
 
@@ -258,7 +256,7 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
         setProperty(PERSISTENT, persistent);
     }
 
-    public Boolean getUseTx() {
+    public boolean getUseTx() {
         return getPropertyAsBoolean(USE_TX, DEFAULT_USE_TX);
     }
 
@@ -320,24 +318,23 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
     }
 
     private Map<String, Object> prepareHeaders() {
-        Map<String, Object> result = new HashMap<String, Object>();
-        Map<String, String> source = getHeaders().getArgumentsAsMap();
+        Arguments headers = getHeaders();
 
-        for (Map.Entry<String, String> item : source.entrySet()) {
-            result.put(item.getKey(), item.getValue());
+        if (headers != null) {
+            return new HashMap<>(headers.getArgumentsAsMap());
         }
 
-        return result;
+        return Collections.emptyMap();
     }
 
     private String formatHeaders() {
         Map<String, String> headers = getHeaders().getArgumentsAsMap();
         StringBuilder sb = new StringBuilder();
 
-        for (String key : headers.keySet()) {
-            sb.append(key)
+        for (Map.Entry<String,String> entry : headers.entrySet()) {
+            sb.append(entry.getKey())
                 .append(": ")
-                .append(headers.get(key))
+                .append(entry.getValue())
                 .append("\n");
         }
 
