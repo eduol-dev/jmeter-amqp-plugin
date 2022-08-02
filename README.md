@@ -97,4 +97,6 @@ Thanks to
 
 ## Contributing
 
-Contributions are welcome.
+Contributions are welcome.\
+[Raise an issue](https://github.com/aliesbelik/jmeter-amqp-plugin/issues), [open a pull request](https://github.com/aliesbelik/jmeter-amqp-plugin/pulls),
+or [start a discussion](https://github.com/aliesbelik/jmeter-amqp-plugin/discussions) with your ideas.
