@@ -151,7 +151,15 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
 
             result.setResponseCodeOK();
             result.setSuccessful(true);
-        } catch (ShutdownSignalException | ConsumerCancelledException | InterruptedException | IOException e) {
+        } catch(InterruptedException ie) {
+            Thread.currentThread().interrupt();     // re-interrupt the current thread
+            response = null;
+            consumer = null;
+            consumerTag = null;
+            log.warn("Interrupted while attempting to consume", ie);
+            result.setResponseCode(EXCEPTION_TO_RESPONSE_CODE.get(ie.getClass()));
+            result.setResponseMessage(ie.getMessage());
+        } catch (ShutdownSignalException | ConsumerCancelledException | IOException e) {
             response = null;
             consumer = null;
             consumerTag = null;

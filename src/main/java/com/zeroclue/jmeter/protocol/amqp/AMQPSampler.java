@@ -501,6 +501,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
 
     @Override
     public void threadStarted() {
+        log.info("AMQPSampler.threadStarted called");
     }
 
     protected Channel createChannel() throws IOException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
