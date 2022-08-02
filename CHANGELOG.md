@@ -5,17 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.0] - 2022-08-02
+
+Update RabbitMQ amqp-client from 4.x to 5.x.
+Look into [changes between 4.x.x and 5.0.0](https://github.com/rabbitmq/rabbitmq-java-client/releases/tag/v5.0.0) for details.
 
 ### Added
 
+* CodeQL and SonarCloud analysis.
+
 ### Changed
+
+* RabbitMQ amqp-client compatibility bumped from 4.x.x to 5.x.x (#8). Thanks to [@t-h-e](https://github.com/t-h-e).
+* Single jar with dependencies provided as release artifact (#1).
 
 ### Fixed
 
+* NullPointerException on purging queue in AMQP Consumer (#10). Thanks to [@t-h-e](https://github.com/t-h-e).
+
 ### Dependency Updates
 
-* Up amqp-client version to 5.14.2.
+* Up jmeter-core version to 5.5.
+* Up amqp-client version to 5.15.0.
 
 ## [0.1.0] - 2022-01-15
 
@@ -41,14 +52,14 @@ Initial release.
 * Scenario example updated.
 * Code cleanup.
 
-### Removed
-
-* Redundant dependencies removed.
-
 ### Fixed
 
 * No header in reply-to message issue (see jlavallee#41). Thanks to [@gregLibert](https://github.com/gregLibert).
 * Checkstyle issues.
+
+### Removed
+
+* Redundant dependencies removed.
 
 ### Dependency Updates
 
@@ -56,5 +67,5 @@ Initial release.
 * Up amqp-client version to 4.12.0.
 * Up commons-lang3 version to 3.12.0.
 
-[unreleased]: https://github.com/aliesbelik/jmeter-amqp-plugin/compare/v0.1.0...HEAD
+[0.2.0]: https://github.com/aliesbelik/jmeter-amqp-plugin/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/aliesbelik/jmeter-amqp-plugin/releases/tag/v0.1.0
