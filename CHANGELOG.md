@@ -67,5 +67,6 @@ Initial release.
 * Up amqp-client version to 4.12.0.
 * Up commons-lang3 version to 3.12.0.
 
-[0.2.0]: https://github.com/aliesbelik/jmeter-amqp-plugin/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/aliesbelik/jmeter-amqp-plugin/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/aliesbelik/jmeter-amqp-plugin/releases/tag/v0.2.0
 [0.1.0]: https://github.com/aliesbelik/jmeter-amqp-plugin/releases/tag/v0.1.0
