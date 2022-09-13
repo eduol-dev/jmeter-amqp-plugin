@@ -2,7 +2,7 @@
 
 [![build status](https://img.shields.io/github/workflow/status/aliesbelik/jmeter-amqp-plugin/CI?label=build&color=18BA91&style=flat-square)](https://github.com/aliesbelik/jmeter-amqp-plugin/actions/workflows/maven.yml)
 [![release](https://img.shields.io/github/v/release/aliesbelik/jmeter-amqp-plugin?label=release&color=18BA91&style=flat-square)](https://github.com/aliesbelik/jmeter-amqp-plugin/releases/latest)
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?color=18BA91&style=flat-square)](https://github.com/aliesbelik/jmeter-amqp-plugin/issues)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?color=18BA91&style=flat-square)](CONTRIBUTING.md)
 
 A [JMeter](http://jmeter.apache.org/) plugin to publish & consume messages from [RabbitMQ](http://www.rabbitmq.com/)
 or any [AMQP](http://www.amqp.org/) message broker.
@@ -10,7 +10,7 @@ or any [AMQP](http://www.amqp.org/) message broker.
 ## Requirements
 
   - Requires JDK 8 or higher.
-  - Compatible with versions up to **5.15.x** of [com.rabbitmq:amqp-client](https://github.com/rabbitmq/rabbitmq-java-client).
+  - Compatible with versions up to **5.x.x** of [com.rabbitmq:amqp-client](https://github.com/rabbitmq/rabbitmq-java-client).
 
 ## Installation
 
@@ -27,7 +27,7 @@ This plugin includes 2 samplers:
   - [**AMQP Publisher**](#amqp-publisher)
   - [**AMQP Consumer**](#amqp-consumer)
 
-Both samplers can be found in the Add -> Sampler list shown as below:
+Both samplers can be found in the **Add -> Sampler** list shown as below:
 
 ![amqp-plugin-samplers](docs/images/amqp-plugin-samplers.png)
 
@@ -73,6 +73,8 @@ target/jmeter-amqp-plugin-VERSION.jar
 target/original-jmeter-amqp-plugin-VERSION.jar
 ```
 
+### Install
+
 To install, execute:
 
 ```
@@ -98,5 +100,4 @@ Thanks to
 ## Contributing
 
 Contributions are welcome.\
-[Raise an issue](https://github.com/aliesbelik/jmeter-amqp-plugin/issues), [open a pull request](https://github.com/aliesbelik/jmeter-amqp-plugin/pulls),
-or [start a discussion](https://github.com/aliesbelik/jmeter-amqp-plugin/discussions) with your ideas.
+Please take a look at the [contributing](CONTRIBUTING.md) guideline first.
