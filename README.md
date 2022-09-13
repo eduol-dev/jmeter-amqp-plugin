@@ -2,6 +2,7 @@
 
 [![build status](https://img.shields.io/github/workflow/status/aliesbelik/jmeter-amqp-plugin/CI?label=build&color=18BA91&style=flat-square)](https://github.com/aliesbelik/jmeter-amqp-plugin/actions/workflows/maven.yml)
 [![release](https://img.shields.io/github/v/release/aliesbelik/jmeter-amqp-plugin?label=release&color=18BA91&style=flat-square)](https://github.com/aliesbelik/jmeter-amqp-plugin/releases/latest)
+![downloads](https://img.shields.io/github/downloads/aliesbelik/jmeter-amqp-plugin/total?color=18BA91&style=flat-square)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?color=18BA91&style=flat-square)](CONTRIBUTING.md)
 
 A [JMeter](http://jmeter.apache.org/) plugin to publish & consume messages from [RabbitMQ](http://www.rabbitmq.com/)
