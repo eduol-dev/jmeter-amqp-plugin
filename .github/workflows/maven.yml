@@ -16,10 +16,11 @@ on:
 jobs:
   compile:
     strategy:
+      fail-fast: false
       matrix:
-        os: [ ubuntu-latest ]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
         java: [ 8, 11, 17 ]
-        distro: [ 'zulu', 'temurin' ]
+        distro: [ 'zulu' ]
     runs-on: ${{ matrix.os }}
     name: Java ${{ matrix.java }} (${{ matrix.distro }} @ ${{ matrix.os }}) compile
     steps:
