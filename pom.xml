@@ -77,7 +77,6 @@
         <configuration>
           <source>${maven.compiler.source}</source>
           <target>${maven.compiler.target}</target>
-          <optimize>true</optimize>
           <showDeprecation>false</showDeprecation>
           <showWarnings>true</showWarnings>
         </configuration>
@@ -94,8 +93,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <!-- https://issues.apache.org/jira/browse/MSHADE-366 -->
-              <minimizeJar>false</minimizeJar>
+              <minimizeJar>true</minimizeJar>
               <shadedArtifactAttached>false</shadedArtifactAttached>
               <createDependencyReducedPom>false</createDependencyReducedPom>
               <filters>
