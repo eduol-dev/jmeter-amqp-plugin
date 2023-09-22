@@ -89,8 +89,6 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
 
         String data = getMessage();     // sampler data
 
-        result.setSampleLabel(getTitle());
-
         /*
          * Perform the sampling
          */
@@ -121,9 +119,7 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
              */
 
             result.setSamplerData(data);
-            result.setResponseData("OK", null);
             result.setDataType(SampleResult.TEXT);
-
             result.setRequestHeaders(formatHeaders());
 
             result.setResponseCodeOK();
