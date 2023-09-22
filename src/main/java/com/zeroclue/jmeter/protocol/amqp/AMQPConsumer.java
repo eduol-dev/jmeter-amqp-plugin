@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
@@ -77,7 +78,6 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
         result.setSampleLabel(getName());
         result.setSuccessful(false);
         result.setResponseCode(DEFAULT_RESPONSE_CODE);
-        result.setSampleLabel(getTitle());
 
         trace("AMQPConsumer.sample()");
 
@@ -127,10 +127,9 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
                  */
                 if (getReadResponseAsBoolean()) {
                     String responseStr = new String(delivery.getBody());
-                    result.setSamplerData(responseStr);
-                    result.setResponseData(responseStr, null);
+                    result.setResponseData(responseStr, StandardCharsets.UTF_8.name());
                 } else {
-                    result.setSamplerData("Read response is false.");
+                    result.setResponseData("Read response failed", StandardCharsets.UTF_8.name());
                 }
 
                 if (!autoAck()) {
@@ -146,10 +145,10 @@ public class AMQPConsumer extends AMQPSampler implements Interruptible, TestStat
             /*
              * Set up the sample result details
              */
-            result.setResponseMessage("OK");
             result.setDataType(SampleResult.TEXT);
             result.setResponseHeaders(delivery != null ? formatHeaders(delivery) : null);
 
+            result.setResponseMessage("OK");
             result.setResponseCodeOK();
             result.setSuccessful(true);
         } catch(InterruptedException ie) {
