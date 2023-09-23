@@ -4,12 +4,16 @@ import com.zeroclue.jmeter.protocol.amqp.AMQPSampler;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+
+import kg.apc.jmeter.JMeterPluginsUtils;
 
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
@@ -55,6 +59,8 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
     private static final String EXCHANGE_SETTINGS_LABEL = "Exchange";
     private static final String QUEUE_SETTINGS_LABEL = "Queue";
     private static final String CONNECTION_SETTINGS_LABEL = "Connection";
+
+    private static final String WIKI_PAGE = "https://github.com/aliesbelik/jmeter-amqp-plugin";
 
     protected abstract void setMainPanel(JPanel panel);
 
@@ -178,8 +184,13 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
     protected void init() {
         setLayout(new BorderLayout(0, 5));
         setBorder(makeBorder());
-        add(makeTitlePanel(), BorderLayout.NORTH);  // add the standard title
 
+        // TOP panel
+        Container topPanel = makeTitlePanel();
+        add(JMeterPluginsUtils.addHelpLinkToPanel(topPanel, WIKI_PAGE), BorderLayout.NORTH);
+        add(topPanel, BorderLayout.NORTH);
+
+        // MAIN panel
         JPanel mainPanel = new VerticalPanel();
         mainPanel.add(makeCommonPanel());
         mainPanel.add(iterations);
