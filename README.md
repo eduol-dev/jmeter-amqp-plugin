@@ -10,7 +10,8 @@ or any [AMQP](http://www.amqp.org/) message broker.
 
 ## Requirements
 
-  - Requires JDK 8 or higher.
+  - Requires **JDK 8** or higher.
+  - Works with **Apache JMeter 5.6.x**.
   - Compatible with versions up to **5.x.x** of [com.rabbitmq:amqp-client](https://github.com/rabbitmq/rabbitmq-java-client).
 
 ## Installation
@@ -19,7 +20,7 @@ or any [AMQP](http://www.amqp.org/) message broker.
 [build your own](#build) from the source code.
 2. Put `jmeter-amqp-plugin-VERSION.jar` into `$JMETER_HOME/lib/ext` directory.\
 It contains the necessary AMQP client dependency, no other jars are required.
-3. Restart JMeter GUI.
+3. Restart JMeter.
 
 ## Usage
 
@@ -81,6 +82,8 @@ To install, execute:
 ```
 cp target/jmeter-amqp-plugin-VERSION.jar $JMETER_HOME/lib/ext
 ```
+
+Restart JMeter.
 
 ## Acknowledgements
 
