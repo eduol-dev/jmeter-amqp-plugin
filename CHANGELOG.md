@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
 ## [0.3.0] - 2023-09-27
 
 Minor release with some new features, bug fixes, UI improvements, and dependency upgrades.
@@ -63,7 +65,7 @@ Initial release.
 * `Content-encoding` message property (for AMQP Publisher). Thanks to [@gybandi](https://github.com/gybandi).
 * Queue `x-max-priority` & message `priority` parameters (see [jlavallee#42](https://github.com/jlavallee/JMeter-Rabbit-AMQP/pull/42)). Thanks to [@gregLibert](https://github.com/gregLibert), [@looseend](https://github.com/looseend).
 * Request (for AMQP Publisher) and response (for AMQP Consumer) headers.
-* Option to configure transactional AMQP consumer from the UI (see [jlavallee#38](https://github.com/jlavallee/JMeter-Rabbit-AMQP/pull/38)). Thanks to [@nicklasbondesson](https://github.com/nicklasbondesson).
+* Option to configure transactional AMQP consumer from the UI (see [jlavallee#38](https://github.com/jlavallee/JMeter-Rabbit-AMQP/pull/38)). Thanks to [@nicklascarnegie](https://github.com/nicklascarnegie).
 * `Auto-delete` property for exchange (see [jlavallee#33](https://github.com/jlavallee/JMeter-Rabbit-AMQP/pull/33)). Thanks to [@wneild](https://github.com/wneild).
 * `Heartbeat` option (see [zeph1rus/JMeter-Rabbit-AMQP@efddefa](https://github.com/zeph1rus/JMeter-Rabbit-AMQP/commit/efddefad62aa54eed4a96dd4cc0b9fe2fb040e1a)). Thanks to [@zeph1rus](https://github.com/zeph1rus).
 * Jar with dependencies.
