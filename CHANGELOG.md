@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.3.0] - 2023-09-27
+### Dependency Updates
+
+* Up amqp-client version to 5.20.0.
+
+## [0.3.0]
+
+> 2023-09-27
 
 Minor release with some new features, bug fixes, UI improvements, and dependency upgrades.
 
@@ -20,8 +26,8 @@ Minor release with some new features, bug fixes, UI improvements, and dependency
 ### Fixed
 
 * Fix error on JMeter startup caused by manifest absence [#48](https://github.com/aliesbelik/jmeter-amqp-plugin/pull/48). Thanks to [@AbstractBike](https://github.com/AbstractBike).
-* setResponseData removed from AMQP Publisher.
-* setSamplerData removed from AMQP Consumer.
+* `setResponseData` removed from AMQP Publisher.
+* `setSamplerData` removed from AMQP Consumer.
 
 ### Infra
 
@@ -33,7 +39,9 @@ Minor release with some new features, bug fixes, UI improvements, and dependency
 * Up jmeter-core version to 5.6.2.
 * Up amqp-client version to 5.18.0.
 
-## [0.2.0] - 2022-08-02
+## [0.2.0]
+
+> 2022-08-02
 
 Update RabbitMQ amqp-client from 4.x to 5.x.\
 Look into [changes between 4.x.x and 5.0.0](https://github.com/rabbitmq/rabbitmq-java-client/releases/tag/v5.0.0) for details.
@@ -56,7 +64,9 @@ Look into [changes between 4.x.x and 5.0.0](https://github.com/rabbitmq/rabbitmq
 * Up jmeter-core version to 5.5.
 * Up amqp-client version to 5.15.0.
 
-## [0.1.0] - 2022-01-15
+## [0.1.0]
+
+> 2022-01-15
 
 Initial release.
 
