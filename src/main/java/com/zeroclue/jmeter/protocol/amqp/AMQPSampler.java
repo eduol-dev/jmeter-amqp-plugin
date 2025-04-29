@@ -28,29 +28,33 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     private static final Logger log = LoggerFactory.getLogger(AMQPSampler.class);
 
     //++ These are JMX names, and must not be changed
-    protected static final String EXCHANGE              = "AMQPSampler.Exchange";
-    protected static final String EXCHANGE_TYPE         = "AMQPSampler.ExchangeType";
-    protected static final String EXCHANGE_DURABLE      = "AMQPSampler.ExchangeDurable";
-    protected static final String EXCHANGE_REDECLARE    = "AMQPSampler.ExchangeRedeclare";
-    protected static final String EXCHANGE_AUTO_DELETE  = "AMQPSampler.ExchangeAutoDelete";
-    protected static final String QUEUE                 = "AMQPSampler.Queue";
-    protected static final String ROUTING_KEY           = "AMQPSampler.RoutingKey";
-    protected static final String VIRTUAL_HOST          = "AMQPSampler.VirtualHost";
-    protected static final String HOST                  = "AMQPSampler.Host";
-    protected static final String PORT                  = "AMQPSampler.Port";
-    protected static final String SSL                   = "AMQPSampler.SSL";
-    protected static final String USERNAME              = "AMQPSampler.Username";
-    protected static final String PASSWORD              = "AMQPSampler.Password";
-    protected static final String HEARTBEAT             = "AMQPSampler.Heartbeat";
-    private static final String TIMEOUT                 = "AMQPSampler.Timeout";
-    private static final String ITERATIONS              = "AMQPSampler.Iterations";
-    private static final String MESSAGE_TTL             = "AMQPSampler.MessageTTL";
-    private static final String MESSAGE_EXPIRES         = "AMQPSampler.MessageExpires";
-    private static final String MAX_PRIORITY            = "AMQPSampler.MaxPriority";
-    private static final String QUEUE_DURABLE           = "AMQPSampler.QueueDurable";
-    private static final String QUEUE_REDECLARE         = "AMQPSampler.Redeclare";
-    private static final String QUEUE_EXCLUSIVE         = "AMQPSampler.QueueExclusive";
-    private static final String QUEUE_AUTO_DELETE       = "AMQPSampler.QueueAutoDelete";
+    protected static final String EXCHANGE                  = "AMQPSampler.Exchange";
+    protected static final String EXCHANGE_TYPE             = "AMQPSampler.ExchangeType";
+    protected static final String EXCHANGE_DURABLE          = "AMQPSampler.ExchangeDurable";
+    protected static final String EXCHANGE_REDECLARE        = "AMQPSampler.ExchangeRedeclare";
+    protected static final String EXCHANGE_AUTO_DELETE      = "AMQPSampler.ExchangeAutoDelete";
+    protected static final String QUEUE                     = "AMQPSampler.Queue";
+    protected static final String ROUTING_KEY               = "AMQPSampler.RoutingKey";
+    protected static final String VIRTUAL_HOST              = "AMQPSampler.VirtualHost";
+    protected static final String HOST                      = "AMQPSampler.Host";
+    protected static final String PORT                      = "AMQPSampler.Port";
+    protected static final String SSL                       = "AMQPSampler.SSL";
+    protected static final String USERNAME                  = "AMQPSampler.Username";
+    protected static final String PASSWORD                  = "AMQPSampler.Password";
+    protected static final String HEARTBEAT                 = "AMQPSampler.Heartbeat";
+    private static final String TIMEOUT                     = "AMQPSampler.Timeout";
+    private static final String ITERATIONS                  = "AMQPSampler.Iterations";
+    private static final String MESSAGE_TTL                 = "AMQPSampler.MessageTTL";
+    private static final String MESSAGE_EXPIRES             = "AMQPSampler.MessageExpires";
+    private static final String MAX_PRIORITY                = "AMQPSampler.MaxPriority";
+    private static final String QUEUE_DURABLE               = "AMQPSampler.QueueDurable";
+    private static final String QUEUE_REDECLARE             = "AMQPSampler.Redeclare";
+    private static final String QUEUE_EXCLUSIVE             = "AMQPSampler.QueueExclusive";
+    private static final String QUEUE_AUTO_DELETE           = "AMQPSampler.QueueAutoDelete";
+
+    protected static final String HAS_X_DEAD_LETTER         = "AMQPSampler.HasXDeadLetter";
+    private static final String X_DEAD_LETTER_EXCHANGE      = "AMQPSampler.XDeadLetterExchange";
+    private static final String X_DEAD_LETTER_ROUTING_KEY   = "AMQPSampler.XDeadLetterRoutingKey";
 
     public static final String[] EXCHANGE_TYPES = new String[] {
         "direct",
@@ -63,6 +67,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
 
     public static final String DEFAULT_EXCHANGE_NAME = "jmeterExchange";
 
+    public static final boolean DEFAULT_XDLQ = false;
     public static final boolean DEFAULT_EXCHANGE_DURABLE = true;
     public static final boolean DEFAULT_EXCHANGE_AUTO_DELETE = false;
     public static final boolean DEFAULT_EXCHANGE_REDECLARE = false;
@@ -102,6 +107,7 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
     // The value is in seconds, and default value suggested by RabbitMQ is 60.
     public static final int DEFAULT_HEARTBEAT = 60;
     public static final String DEFAULT_HEARTBEAT_STRING = Integer.toString(DEFAULT_HEARTBEAT);
+
 
     private final transient ConnectionFactory factory;
     private transient Connection connection;
@@ -182,7 +188,33 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
             arguments.put("x-max-priority", getMaxPriorityAsInt());
         }
 
+        if(getHasXDeadLetter()) {
+            if(getXDeadLetterExchange() != null) {
+                arguments.put("x-dead-letter-exchange", getXDeadLetterExchange());
+            }
+
+            if (getXDeadLetterRoutingKey() != null) {
+                arguments.put("x-dead-letter-routing-key", getXDeadLetterRoutingKey());
+            }
+        }
+
         return arguments;
+    }
+
+    public String getXDeadLetterRoutingKey() {
+        return getPropertyAsString(X_DEAD_LETTER_ROUTING_KEY);
+    }
+
+    public String getXDeadLetterExchange() {
+        return getPropertyAsString(X_DEAD_LETTER_EXCHANGE);
+    }
+
+    public void setXDeadLetterExchange(String name) {
+        setProperty(X_DEAD_LETTER_EXCHANGE, name);
+    }
+
+    public void setXDeadLetterRoutingKey(String name) {
+        setProperty(X_DEAD_LETTER_ROUTING_KEY, name);
     }
 
     protected abstract Channel getChannel();
@@ -203,6 +235,9 @@ public abstract class AMQPSampler extends AbstractSampler implements ThreadListe
 
         return getPropertyAsInt(TIMEOUT);
     }
+
+    public boolean getHasXDeadLetter() { return getPropertyAsBoolean(HAS_X_DEAD_LETTER);}
+    public void setHasXDeadLetter(boolean hasXDLQ){ setProperty(HAS_X_DEAD_LETTER, hasXDLQ);}
 
     public String getTimeout() {
         return getPropertyAsString(TIMEOUT, DEFAULT_TIMEOUT_STRING);

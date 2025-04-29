@@ -35,6 +35,8 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
     private final JCheckBox exchangeRedeclare = new JCheckBox("Redeclare", AMQPSampler.DEFAULT_EXCHANGE_REDECLARE);
     private final JCheckBox exchangeAutoDelete = new JCheckBox("Auto Delete", AMQPSampler.DEFAULT_EXCHANGE_AUTO_DELETE);
 
+    private final JCheckBox hasXDLQ = new JCheckBox("Has XDLQ", AMQPSampler.DEFAULT_XDLQ);
+
     protected JLabeledTextField queue = new JLabeledTextField("             Queue");
     protected JLabeledTextField routingKey = new JLabeledTextField("   Routing Key");
     protected JLabeledTextField messageTTL = new JLabeledTextField("Message TTL");
@@ -53,6 +55,9 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
     protected JLabeledTextField password = new JLabeledTextField("   Password");
     protected JLabeledTextField heartbeat = new JLabeledTextField("  Heartbeat");
     private final JCheckBox ssl = new JCheckBox("SSL", AMQPSampler.DEFAULT_SSL_STATE);
+
+    protected JLabeledTextField xDeadLetterExchange = new JLabeledTextField("x-dead-letter-exchange");
+    protected JLabeledTextField xDeadLetterRoutingKey = new JLabeledTextField("x-dead-letter-routing-key");
 
     protected final JLabeledTextField iterations = new JLabeledTextField("Number of Samples to Aggregate");
 
@@ -80,6 +85,9 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         exchangeDurable.setSelected(sampler.getExchangeDurable());
         exchangeRedeclare.setSelected(sampler.getExchangeRedeclare());
         exchangeAutoDelete.setSelected(sampler.getExchangeAutoDelete());
+
+        xDeadLetterExchange.setText(sampler.getXDeadLetterExchange());
+        xDeadLetterRoutingKey.setText(sampler.getXDeadLetterRoutingKey());
 
         queue.setText(sampler.getQueue());
         routingKey.setText(sampler.getRoutingKey());
@@ -154,6 +162,7 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         sampler.setExchangeDurable(exchangeDurable.isSelected());
         sampler.setExchangeRedeclare(exchangeRedeclare.isSelected());
         sampler.setExchangeAutoDelete(exchangeAutoDelete.isSelected());
+        sampler.setHasXDeadLetter(hasXDLQ.isSelected());
 
         sampler.setQueue(queue.getText());
         sampler.setRoutingKey(routingKey.getText());
@@ -176,6 +185,9 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         sampler.setConnectionSSL(ssl.isSelected());
 
         sampler.setIterations(iterations.getText());
+
+        sampler.setXDeadLetterExchange(xDeadLetterExchange.getText());
+        sampler.setXDeadLetterRoutingKey(xDeadLetterRoutingKey.getText());
 
         log.debug("AMQPSamplerGui.modifyTestElement() called, set user/pass to {}/{} on sampler {}",
             username.getText(), password.getText(), sampler);
@@ -269,6 +281,18 @@ public abstract class AMQPSamplerGui extends AbstractSamplerGui {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         queueSettings.add(maxPriority, gridBagConstraints);
+
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        queueSettings.add(hasXDLQ, gridBagConstraints);
+
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        queueSettings.add(xDeadLetterExchange, gridBagConstraints);
+
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        queueSettings.add(xDeadLetterRoutingKey, gridBagConstraints);
 
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;

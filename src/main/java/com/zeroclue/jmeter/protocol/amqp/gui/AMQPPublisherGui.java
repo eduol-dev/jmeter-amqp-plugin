@@ -11,6 +11,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import com.zeroclue.jmeter.protocol.amqp.AMQPSampler;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.config.gui.ArgumentsPanel;
 import org.apache.jmeter.gui.util.HorizontalPanel;
@@ -41,7 +42,7 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
     private final JCheckBox persistent = new JCheckBox("Persistent", AMQPPublisher.DEFAULT_PERSISTENT);
     private final JCheckBox useTx = new JCheckBox("Use Transactions", AMQPPublisher.DEFAULT_USE_TX);
 
-    private final ArgumentsPanel headers = new ArgumentsPanel("Headers");
+    private final ArgumentsPanel headers = new AMQPHeadersPanel("Headers");
 
     private static final String MSG_SETTINGS_LABEL = "Message";
     private static final String PROPS_SETTINGS_LABEL = "Properties";
@@ -132,6 +133,7 @@ public class AMQPPublisherGui extends AMQPSamplerGui {
         sampler.setTimestamp(timestamp.isSelected());
 
         sampler.setHeaders((Arguments) headers.createTestElement());
+
     }
 
     @Override

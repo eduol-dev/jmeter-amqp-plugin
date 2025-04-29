@@ -7,18 +7,23 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.Interruptible;
 import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.testelement.property.JMeterProperty;
 import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +67,8 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
     public static final String DEFAULT_RESPONSE_CODE = "500";
     public static final String DEFAULT_CONTENT_TYPE  = "text/plain";
     public static final String DEFAULT_ENCODING      = "utf-8";
+
+    private static final Map<String, Function<String, Object>> CONVERTERS = getConverters();
 
     private transient Channel channel;
 
@@ -346,7 +353,15 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
         Arguments headers = getHeaders();
 
         if (headers != null) {
-            return new HashMap<>(headers.getArgumentsAsMap());
+            final Map<String, Object> preparedHeaders = new HashMap<>();
+            for (final JMeterProperty property : headers) {
+                final Argument arg = (Argument) property.getObjectValue();
+                final String type = arg.getDescription();
+                final Object value = StringUtils.isBlank(type) ? arg.getValue() : convert(type, arg.getValue());
+                preparedHeaders.put(arg.getName(), value);
+            }
+
+            return preparedHeaders;
         }
 
         return Collections.emptyMap();
@@ -362,7 +377,42 @@ public class AMQPPublisher extends AMQPSampler implements Interruptible {
                 .append(entry.getValue())
                 .append("\n");
         }
-
+        log.info("Headers: {}", sb);
         return sb.toString();
+    }
+
+    private static Object convert(final String type, final String value) {
+        final Function<String, Object> converter = CONVERTERS.get(type);
+
+        if (converter == null) {
+            log.error("No converter found for type '{}'", type);
+            throw new NullPointerException("No converter found for type " + type);
+        }
+
+        return converter.apply(value);
+    }
+
+    private static Map<String, Function<String, Object>> getConverters() {
+        final Map<String, Function<String, Object>> converters = new HashMap<>();
+        converters.put("integer", Integer::valueOf);
+        converters.put("date", AMQPPublisher::convertDate);
+        converters.put("string", v -> v);
+        return converters;
+    }
+
+    private static Date convertDate(final String dateString) {
+        final Date date;
+
+        if (StringUtils.isNumeric(dateString)) {
+            date = new Date(Long.parseLong(dateString));
+        } else {
+            try {
+                date = new SimpleDateFormat().parse(dateString);
+            } catch (ParseException e) {
+                throw new IllegalArgumentException(e);
+            }
+        }
+
+        return date;
     }
 }
